@@ -8,13 +8,13 @@ class Department extends Model
 {
     use HasFactory;
 
-    protected $table = 'department';  
+    protected $table = 'department';
     public $timestamps = false;
-    
-    protected $fillable = ['department']; 
-    
-    
+
+    protected $fillable = ['department'];
 
 
-    
+
+
+
 }

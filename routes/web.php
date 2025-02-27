@@ -51,7 +51,7 @@ Route::post('/save_location',[SettingController::class,'save_location'])->name('
 //route for DepartmentController DesignationController
 Route::get('/roles_group',[SettingController::class,'roles_group'])->name('roles_group');
 // Define the dynamic route in web.php
-Route::get('/edit_group/{id}', [DepartmentController::class, 'edituserdata'])->name('edit_group');
+Route::post('/edit_group/{id}', [DepartmentController::class, 'edituserdata'])->name('edit_group');
 
 Route::post('/rolegroup',[DepartmentController::class,'InsertData'])->name('rolesgroup');
 Route::post('/designation',[DesignationController::class,'Insert'])->name('desingroup');
@@ -65,8 +65,11 @@ Route::post('/designation',[DesignationController::class,'Insert'])->name('desin
 
 
 Route::get('/salary_settings',[SettingController::class,'salary_settings'])->name('salary_settings');
+Route::post('/salary_save',[SettingController::class,'salary_save'])->name('salary_save');
+Route::post('/client_save',[SettingController::class,'client_save'])->name('client_save');
 Route::get('/add_employee',[SettingController::class,'add_employee'])->name('add_employee');
 Route::get('/all_client',[SettingController::class,'all_client'])->name('all_client');
 Route::get('/contact',[SettingController::class,'contact'])->name('contact');
+Route::get('/get-sites/{area}', [SettingController::class, 'getSites']);
 
 

@@ -41,14 +41,14 @@
 											<th>Department 2</th>
 											<!--<th class="text-right">Action</th>-->
 										</tr>
-										
+
 									</thead>
 									<tbody>
 									<tr>
-											 @foreach ($depart as $key => $value) 
+											 @foreach ($depart as $key => $value)
 										<tr>
-										
-              
+
+
 											<td>{{$loop->iteration}}</td>
 											<td>{{$value->designation_name}}</td>
 											<td> {{$value->department}} </td>
@@ -97,7 +97,7 @@
 									@foreach ($depart_name as $key => $dep)
 									@php
 									$ids=$dep->id;
-									
+
 									@endphp
 										<tr>
 											<td>{{$i++}}</td>
@@ -118,33 +118,31 @@
 											<div class="modal-dialog modal-dialog-centered" role="document">
 												<div class="modal-content">
 													<div class="modal-header">
-														<h5 class="modal-title">Eddit Department</h5>
+														<h5 class="modal-title">Edit Department</h5>
 														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
 													<div class="modal-body">
-														
-														
+
+
 														<form action="{{ route('edit_group', $dep->id) }}" method="post">
 														 @csrf
-														 <input type="hidden" name="user" value="{{ $dep->id }}">
-						
 															<div class="form-group">
 																<label>Department Name <span class="text-danger">*</span></label>
-																<input class="form-control" type="text" Name="department" value="{{ $dep->department }}">
+																<input class="form-control" type="text" name="department" value="{{ $dep->department }}">
 															</div>
 															<div class="submit-section">
 																<button class="btn btn-primary submit-btn">Submit</button>
 															</div>
 														</form>
-														
+
 													</div>
 												</div>
 											</div>
 										</div>
 										@endforeach
- 
+
 									</tbody>
 								</table>
 									</div>
@@ -185,7 +183,7 @@
 				</div>
 				<!-- /Add edittt Department Modal -->
 
-				
+
 				<!-- end edittt Department Modal -->
 				<!-- Add Designation Modal -->
 				<div id="add_designation" class="modal custom-modal fade" role="dialog">
@@ -206,15 +204,15 @@
 										<input class="form-control" type="text" name="designation" value="">
 									</div>
 									<div class="form-group">
-								
+
 										<label>Department <span class="text-danger">*</span></label>
 										<select class="select" name="dept_id">
 									@foreach ($depart_name as $dep)
 					                <option value="{{$dep->id}}">{{ $dep->department }}</option>
 				                       @endforeach
 										</select>
-									 
-										
+
+
 									</div>
 									<div class="submit-section">
 										<button class="btn btn-primary submit-btn">Submit</button>
@@ -229,7 +227,7 @@
 
 
 
-			<div class="container">
+			{{-- <div class="container">
 		    			<h2 class="block-head">SEO Packages</h2>
 		    			<p style="font-size: 20px" class="center">Here are our SEO Packages, Choose as per your business requirement. Do contact us for custom plan.</p>
 					<br>
@@ -443,5 +441,5 @@
 		                            </ul>
 			    				</div>
 			    			</div>
-		    			</div>
+		    			</div> --}}
 @endsection

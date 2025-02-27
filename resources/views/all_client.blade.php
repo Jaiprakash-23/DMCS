@@ -221,64 +221,65 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form>
+							<form action="{{route('client_save')}}" method="POST">
+                                @csrf
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">First Name <span class="text-danger">*</span></label>
-											<input class="form-control" type="text">
+											<input class="form-control" name="first_name" type="text">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Last Name</label>
-											<input class="form-control" type="text">
+											<input class="form-control" name="last_name" type="text">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Username <span class="text-danger">*</span></label>
-											<input class="form-control" type="text">
+											<input class="form-control" name="username" type="text">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Email <span class="text-danger">*</span></label>
-											<input class="form-control floating" type="email">
+											<input class="form-control floating" name="email" type="email">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Password</label>
-											<input class="form-control" type="password">
+											<input class="form-control" name="password" type="password">
 										</div>
 									</div>
-									<div class="col-md-6">
+									{{-- <div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Confirm Password</label>
-											<input class="form-control" type="password">
+											<input class="form-control" name type="password">
 										</div>
-									</div>
+									</div> --}}
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Client ID <span class="text-danger">*</span></label>
-											<input class="form-control floating" type="text">
+											<input class="form-control floating" name="client_id" type="text">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Phone </label>
-											<input class="form-control" type="text">
+											<input class="form-control" name="phone" type="text">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="col-form-label">Company Name</label>
-											<input class="form-control" type="text">
+											<input class="form-control" name="company_name" type="text">
 										</div>
 									</div>
 								</div>
-								<div class="table-responsive m-t-15">
+								{{-- <div class="table-responsive m-t-15">
 									<table class="table table-striped custom-table">
 										<thead>
 											<tr>
@@ -420,9 +421,9 @@
 											</tr>
 										</tbody>
 									</table>
-								</div>
+								</div> --}}
 								<div class="submit-section">
-									<button class="btn btn-primary submit-btn">Submit</button>
+									<button type="submit" class="btn btn-primary submit-btn">Submit</button>
 								</div>
 							</form>
 						</div>

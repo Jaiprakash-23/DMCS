@@ -65,6 +65,7 @@
 								<table class="table table-striped custom-table mb-0 datatable">
 									<thead>
 										<tr>
+                                            <th>Sr No.</th>
 											<th>Employee</th>
 											<th> Employee ID</th>
 											<th>Date</th>
@@ -76,18 +77,22 @@
 									<tbody>
 
 									<tr>
-                                        @foreach ( $all_employee_attendance as $attendance )
+                                        @foreach ( $all_employee_attendance as $key=> $attendance )
 
 
+                                            @php
+                                                $date=date('Y-m-d');
+                                            @endphp
+                                            <td>{{$loop->iteration}}</td>
 											<td>
 												<h2 class="table-avatar">
 													<a href="profile.html" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
-													<a>	{{$attendance->fullname}}  <span>Web Designer</span></a>
+													<a>	{{$attendance->fullname}}  <span>{{$attendance->designation}}</span></a>
 												</h2>
 											</td>
-											<td>FT-0001</td>
-											<td>27 Feb 2019</td>
-											<td>White Archid</td>
+											<td>{{$attendance->emp_id}}</td>
+											<td>{{$date}}</td>
+											<td>{{$attendance->site}}</td>
 											<td class="text-center">
 												<div class="dropdown action-label">
 													<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">

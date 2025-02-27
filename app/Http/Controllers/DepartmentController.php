@@ -12,20 +12,22 @@ class DepartmentController extends Controller
         // $ins = new Department;
         // $ins->department = $req->department;
 
-        // $ins->save(); 
-    
+        // $ins->save();
+
         // return redirect()->back();
-        $data=department::create($req->all()); //insert data query but both field name same 
-    
+        $data=department::create($req->all()); //insert data query but both field name same
+
         return redirect()->back();
     }
-    // public function edituserdata($id) //show data in inputbox
-    // {
-    //   $emp_tbl = new Department();
-    //   $user = $emp_tbl::where('id', $id)->first();
-    //   return view('d_d', ['user' => $user]);
-    // }
+    public function edituserdata(Request $request,$id) //show data in inputbox
+    {
+      $data=array('department'=>$request->department, 'created'=>date('Y-m-d H:i:s'));
 
-     
-   
+
+      department::where('id',$id)->update($data);
+      return redirect()->back()->with('success',"Successfully updated");
+    }
+
+
+
 }
