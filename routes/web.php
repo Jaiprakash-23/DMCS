@@ -39,6 +39,10 @@ Route::get('/management_attendance',[AttendanceController::class,'management_att
 Route::get('/officer_attendance',[AttendanceController::class,'officer_attendance'])->name('officer_attendance');
 Route::get('/transfer',[AttendanceController::class,'transfer'])->name('transfer');
 
+Route::get('/attendance/list/{id}',[AttendanceController::class,'AttendanceList'])->name('attendance_list');
+
+
+
 //PayRollController
 Route::get('/generate_salary',[PayRollController::class,'generate_salary'])->name('generate_salary');
 Route::get('/emp_salary_report',[PayRollController::class,'emp_salary_report'])->name('emp_salary_report');
@@ -79,5 +83,7 @@ Route::get('/get-sites/{area}', [SettingController::class, 'getSites']);
 
 // code with sanchit Use CommonController
 Route::post('/get_designation',[CommonController::class,'GetDesignation'])->name('get_designation');
+
+Route::post('/present_absent',[CommonController::class,'PresentAbsent'])->name('present_absent');
 
 

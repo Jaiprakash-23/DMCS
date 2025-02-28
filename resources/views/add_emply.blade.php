@@ -36,7 +36,10 @@
                                             <div class="profile-info-left">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control" placeholder="Full Name"
-                                                        name="name" required>
+                                                        name="name">
+                                                        @error('name')
+                                                         <div class="text-danger" >{{ $message }}</div>
+                                                        @enderror
                                                 </div>
                                                 <div class="form-group">
                                                     <select class="select" onchange="selectDesignation()" id="department"

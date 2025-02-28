@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AllEmpAttendance;
 use App\Models\AttendanceGuard;
+use App\Models\Department;
+use App\Models\AllEmployeeEmp;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
@@ -31,5 +33,17 @@ class AttendanceController extends Controller
         $all_employee_attendance = AllEmpAttendance::with(['guards', 'officer', 'qrt', 'management'])->get();
 
         return view('all_employ-attendance', compact('all_employee_attendance'));
+    }
+
+
+    public function AttendanceList($id){
+        if($id<1){
+            $employee=AllEmployeeEmp::get();
+            $department_name="All Employee";
+        }else{
+            $employee=AllEmployeeEmp::where("department",$id)->get();
+            $department_name=Department::where("id",$id)->first()->department;
+        }
+        return view('attendance_list',compact('department_name','employee'));
     }
 }

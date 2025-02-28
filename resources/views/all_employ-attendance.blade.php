@@ -1,3 +1,8 @@
+<?php
+use App\Models\Department;
+use App\Models\Designation;
+use App\Models\location_site as LocationSite;
+?>
 @extends('layouts.app')
 @section('content')
 @include('layouts.admin-sidebar')
@@ -76,23 +81,25 @@
 									</thead>
 									<tbody>
 
-									<tr>
+
                                         @foreach ( $all_employee_attendance as $key=> $attendance )
 
-
+                                        <tr>
                                             @php
                                                 $date=date('Y-m-d');
+                                               $designation= Designation::where("id",$attendance->designation)->first();
+                                               $location_site= LocationSite::where("id",$attendance->site)->first();
                                             @endphp
                                             <td>{{$loop->iteration}}</td>
 											<td>
 												<h2 class="table-avatar">
 													<a href="profile.html" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
-													<a>	{{$attendance->fullname}}  <span>{{$attendance->designation}}</span></a>
+													<a>	{{$attendance->fullname}}  <span>{{$designation->designation}}</span></a>
 												</h2>
 											</td>
 											<td>{{$attendance->emp_id}}</td>
 											<td>{{$date}}</td>
-											<td>{{$attendance->site}}</td>
+											<td>{{$location_site->site_name}}</td>
 											<td class="text-center">
 												<div class="dropdown action-label">
 													<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
@@ -111,8 +118,9 @@
 														</div>
 												</div>
 											</td>
+                                        </tr>
                                             @endforeach
-										</tr>
+
 
 
 

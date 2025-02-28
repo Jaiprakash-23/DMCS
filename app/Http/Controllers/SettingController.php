@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Designation;
 use App\Models\SalaryDistribution;
 use App\Models\Client_List;
+use App\Models\AllEmployeeEmp;
 
 
 class SettingController extends Controller
@@ -72,11 +73,38 @@ class SettingController extends Controller
                  "department"=>"required",
                  "designation"=>"required",
                  "joining_date"=>"required",
+                 "location_site"=>"required",
                  "report_id"=>"required",
 
         ]);
-        dd($request->all());
+        $emp= AllEmployeeEmp::orderBy("id","desc")->first();
+       if(!empty($emp)){
+        $string = $emp->emp_id;
+        $lastIdNumber = (int) preg_replace('/\D/', '', $string);  // Removes non-numeric characters
+       }else{
+        $lastIdNumber=0;
+       }
+       $newEmpId="EMP-00".$lastIdNumber+1;
+        AllEmployeeEmp::create([
+                 "emp_id"=>$newEmpId,
+                 "fullname"=> $request->name,
+                 "department"=>$request->department,
+                 "designation"=>$request->designation,
+                 "site"=>$request->location_site,
+                 "reports_to"=>$request->report_id,
+                 "email"=>$request->email,
+                 "phone"=>$request->contact,
+                 "date_of_joining"=>$request->joining_date,
+                 "date_of_birth"=>$request->dob,
+                 "gender"=>$request->gender,
+                 "address"=>$request->address,
+                 "aadhaar_no"=>$request->aadhar_no,
+                 "voter_id"=>$request->voter_id_no,
+        ]);
+        return redirect()->back()->with('success', 'Insert data successfully');
+
 
     }
+
 
 }

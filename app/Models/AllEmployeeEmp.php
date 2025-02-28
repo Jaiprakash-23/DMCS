@@ -9,6 +9,7 @@ class AllEmployeeEmp extends Model
 {
     use HasFactory;
     protected $table="emp";
-    protected $fillable=[];
+    // protected $fillable=[];
+    protected $guarded = [];
 
 }
