@@ -10,6 +10,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\CommonController;
 
 
 use Illuminate\Support\Facades\File;
@@ -68,8 +69,15 @@ Route::get('/salary_settings',[SettingController::class,'salary_settings'])->nam
 Route::post('/salary_save',[SettingController::class,'salary_save'])->name('salary_save');
 Route::post('/client_save',[SettingController::class,'client_save'])->name('client_save');
 Route::get('/add_employee',[SettingController::class,'add_employee'])->name('add_employee');
+Route::post('/save_employee',[SettingController::class,'SaveEmployee'])->name('save_employee');
 Route::get('/all_client',[SettingController::class,'all_client'])->name('all_client');
 Route::get('/contact',[SettingController::class,'contact'])->name('contact');
 Route::get('/get-sites/{area}', [SettingController::class, 'getSites']);
+
+
+
+
+// code with sanchit Use CommonController
+Route::post('/get_designation',[CommonController::class,'GetDesignation'])->name('get_designation');
 
 

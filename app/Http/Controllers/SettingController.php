@@ -50,6 +50,7 @@ class SettingController extends Controller
         return response()->json($sites);
     }
     public function add_employee(){
+
         return view('add_emply');
     }
     public function all_client(){
@@ -63,6 +64,19 @@ class SettingController extends Controller
         $data=$request->all();
         Client_List::create($data);
         return redirect()->back();
+    }
+
+    public function SaveEmployee(Request $request){
+        $request->validate([
+                 "name"=>"required",
+                 "department"=>"required",
+                 "designation"=>"required",
+                 "joining_date"=>"required",
+                 "report_id"=>"required",
+
+        ]);
+        dd($request->all());
+
     }
 
 }
