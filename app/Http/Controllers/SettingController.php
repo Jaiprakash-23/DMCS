@@ -23,9 +23,7 @@ class SettingController extends Controller
     }
     public function roles_group(){
         $depart_name = department::get();
-        //  dd( $depart_name);
 
-        // return view('d_d',compact('depart'));
         $depart = Department::join('designation', 'designation.dept_id', '=', 'department.id')
              ->select('department.*','designation.designation as designation_name')
              ->get();
