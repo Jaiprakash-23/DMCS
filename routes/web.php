@@ -47,6 +47,7 @@ Route::get('/attendance/list/{id}',[AttendanceController::class,'AttendanceList'
 Route::get('/generate_salary',[PayRollController::class,'generate_salary'])->name('generate_salary');
 Route::get('/emp_salary_report',[PayRollController::class,'emp_salary_report'])->name('emp_salary_report');
 Route::get('/emp_pf_detail',[PayRollController::class,'emp_pf_detail'])->name('emp_pf_detail');
+Route::get('/salary/slip/{id}/{date}',[PayRollController::class,'SalarySlip'])->name('salary_slip');
 
 //Setting Controller
 Route::get('/add_location',[SettingController::class,'add_location'])->name('add_location');

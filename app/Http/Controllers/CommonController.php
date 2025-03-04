@@ -6,6 +6,7 @@ use App\Models\Designation;
 use App\Models\Department;
 use App\Models\Attendance;
 use App\Models\AllEmployeeEmp;
+use App\Models\SalaryDistribution;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -51,5 +52,24 @@ class CommonController extends Controller
             $responce['msg']="Today Already Attendance Approved";
           }
           return response()->json($responce);
+    }
+
+    public function getSalary($id,$date){
+        $month = date("m",strtotime($date));
+        $year = date("Y",strtotime($date));
+        $firstDate = date('Y-m-01', strtotime("$year-$month-01"));
+        $lastDate = date('Y-m-t', strtotime("$year-$month-01"));
+        $total_days=date("d",strtotime($lastDate));
+        $emp=AllEmployeeEmp::where('id',$id)->first();
+        $attendance=Attendance::where("emp_id",$emp->id)->where('date','>=',$firstDate)->where('date','<=',$lastDate)->get();
+        $total_salary=0;
+        foreach($attendance as $at){
+         $salary_tbl=SalaryDistribution::where("site_name",$at->site_id)->where("designation",$at->designation_id)->first();
+         if($at->attendance_status==1){
+            $one_daye_salary=$salary_tbl->salary_amount/$total_days;
+            $total_salary+=$one_daye_salary;
+         }
+        }
+       return $total_salary;
     }
 }

@@ -1,3 +1,7 @@
+<?php
+use App\Models\Department;
+use App\Http\Controllers\CommonController;
+?>
 @extends('layouts.app')
 @section('content')
 @include('layouts.admin-sidebar')
@@ -9,7 +13,7 @@
 
 			<div class="row">
 						<div class="col-sm-4 col-5">
-							<h4 class="page-title"> All Employee Salary</h4>
+							<h4 class="page-title"> All Employee Current Month Salary</h4>
 						</div>
 						<!--<div class="col-sm-8 col-7 text-right m-b-30">
 							<a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_salary"><i class="fa fa-plus"></i> Add Salary</a>
@@ -143,126 +147,27 @@
 										</tr>
 									</thead>
 									<tbody>
+                                        @foreach ($emp as $emps)
+                                        @php
+                                        $comm=new CommonController();
+                                        $total_salary=$comm->getSalary($emps->id,date("Y-m-d"));
+                                            $departmentname = Department::where('id', $emps->department)->first()
+                                            ->department;
+                                        @endphp
 										<tr>
 											<td>
 												<h2 class="table-avatar">
 													<a href="" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
-													<a href="">John Doe <span> Web Designer </span></a>
+													<a href="">{{ $emps->fullname }} <span> {{ $departmentname  }} </span></a>
 												</h2>
 											</td>
-											<td>FT-0001</td>
-											<td>1 Jan 2013</td>
-											<td> </td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>$59698</td>
-											<td><a class="btn btn-sm btn-primary" href="salary-slip.php">Generate Slip</a></td>
-											<td class="text-right">
-												<div class="dropdown dropdown-action">
-													<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-													<div class="dropdown-menu dropdown-menu-right">
-														<a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-														<a class="dropdown-item" href="salary-slip.php" ><i class="fa fa-eye m-r-5"></i> View</a>
-													</div>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<h2 class="table-avatar">
-													<a href="profile.html" class="avatar"><img src="assets/img/profiles/avatar-09.jpg" alt=""></a>
-													<a href="profile.html">Richard Miles <span>Web Developer</span></a>
-												</h2>
-											</td>
-											<td>FT-0002</td>
-										    <td>1 Jan 2013</td>
-											<td> </td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>$28698</td>
-											<td><a class="btn btn-sm btn-primary" href="salary-slip.php">Generate Slip</a></td>
-											<td class="text-right">
-												<div class="dropdown dropdown-action">
-													<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-													<div class="dropdown-menu dropdown-menu-right">
-														<a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-														<a class="dropdown-item" href="salary-slip.php" ><i class="fa fa-eye m-r-5"></i> View</a>
-													</div>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<h2 class="table-avatar">
-													<a href="profile.html" class="avatar"><img src="assets/img/profiles/avatar-10.jpg" alt=""></a>
-													<a href="profile.html">John Smith <span>Android Developer</span></a>
-												</h2>
-											</td>
-											<td>FT-0003</td>
-											<td>1 Jan 2013</td>
-											<td> </td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>$48200</td>
-											<td><a class="btn btn-sm btn-primary" href="salary-slip.php">Generate Slip</a></td>
-											<td class="text-right">
-												<div class="dropdown dropdown-action">
-													<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-													<div class="dropdown-menu dropdown-menu-right">
-														<a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-														<a class="dropdown-item" href="salary-slip.php" ><i class="fa fa-eye m-r-5"></i> View</a>
-													</div>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<h2 class="table-avatar">
-													<a href="profile.html" class="avatar"><img src="assets/img/profiles/avatar-05.jpg" alt=""></a>
-													<a href="profile.html">Mike Litorus <span>IOS Developer</span></a>
-												</h2>
-											</td>
-											<td>FT-0004</td>
-											<td>1 Jan 2013</td>
-											<td> </td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>$59698</td>
-											<td><a class="btn btn-sm btn-primary" href="salary-slip.php">Generate Slip</a></td>
-											<td class="text-right">
-												<div class="dropdown dropdown-action">
-													<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-													<div class="dropdown-menu dropdown-menu-right">
-														<a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-														<a class="dropdown-item" href="salary-slip.php" ><i class="fa fa-eye m-r-5"></i> View</a>
-													</div>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<h2 class="table-avatar">
-													<a href="profile.html" class="avatar"><img src="assets/img/profiles/avatar-11.jpg" alt=""></a>
-													<a href="profile.html">Wilmer Deluna <span>Team Leader</span></a>
-												</h2>
-											</td>
-											<td>FT-0005</td>
-											<td>1 Jan 2013</td>
-											<td> </td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>$43000</td>
-											<td><a class="btn btn-sm btn-primary" href="salary-slip.php">Generate Slip</a></td>
+											<td>{{ $emps->emp_id }}</td>
+											<td>{{ date("d M Y",strtotime($emps->date_of_joining)) }}</td>
+											<td></td>
+											<td></td>
+                                            <td></td>
+											<td>{{ round($total_salary,2) }}</td>
+											<td><a class="btn btn-sm btn-primary" href="{{ route('salary_slip',['id'=>$emps->id,'date'=>date("Ymd")]) }}">Generate Slip</a></td>
 											<td class="text-right">
 												<div class="dropdown dropdown-action">
 													<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -274,6 +179,8 @@
 											</td>
 										</tr>
 
+
+                                        @endforeach
 
 									</tbody>
 								</table>
