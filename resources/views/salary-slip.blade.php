@@ -50,34 +50,34 @@
 							<table class="text-left" style="width:100%;">
 							<tr>
 							<td style="width:25%;"> Employee Id</td>
-							<td style="width:25%;"> :02</td>
+							<td style="width:25%;"> :{{ $emp->emp_id }}</td>
 							<td style="width:25%;"> Name</td>
-							<td style="width:25%;"> :Akhilesh Chaturvedi</td>
+							<td style="width:25%;"> :{{ $emp->fullname }}</td>
 							</tr>
 							<tr>
 							<td style="width:25%;"> Department</td>
-							<td style="width:25%;"> :Information Technology</td>
+							<td style="width:25%;"> :{{ $department_emp->department }}</td>
 							<td style="width:25%;"> Designation</td>
-							<td style="width:25%;"> :Supervisor</td>
+							<td style="width:25%;"> :{{ $designation_emp->designation }}</td>
 							</tr>
 							<tr>
 							<td style="width:25%;"> Date Of Birth</td>
-							<td style="width:25%;"> :22/06/2001</td>
+							<td style="width:25%;"> :{{ date("d-M-Y",strtotime($emp->date_of_birth)) }}</td>
 							<td style="width:25%;"> PF Account Number </td>
 							<td style="width:25%;"> :Esi/07</td>
 
 							</tr>
 							<tr>
 							<td style="width:25%;"> Date Of Joining</td>
-							<td style="width:25%;"> :06/06/2001</td>
+							<td style="width:25%;"> :{{ date("d-M-Y",strtotime($emp->date_of_joining)) }}</td>
 							<td style="width:25%;"> ESI Account Number </td>
 							<td style="width:25%;"> :CA07</td>
 							</tr>
 							<tr>
 							<td style="width:25%;"> Total Days </td>
-							<td style="width:25%;"> :31</td>
+							<td style="width:25%;"> :{{ $month }}</td>
 							<td style="width:25%;"> Work Days </td>
-							<td style="width:25%;"> :31</td>
+							<td style="width:25%;"> :{{ $total_working_days }}</td>
 
 							</tr>
 							</table>
@@ -93,32 +93,32 @@
 							<td style="width:50%;border-left:0px;padding:0px;vertical-align: top;">
 							<table style="width:100%;">
 							<tr style="border-bottom:1px solid #333;"><th>Earnings</th><th class="text-right">YID</th><th class="text-right">Amount</th></tr>
-							<tr><td>Wages</td><td class="text-right">12,000.00</td><td class="text-right">12,000.00</td></tr>
-							<tr><td>Basic Salary</td><td class="text-right">4,800.00</td><td class="text-right">4,800.00</td></tr>
-							<tr><td>House Rent Allowance</td><td class="text-right">7,200.00</td><td class="text-right">7,200.00</td></tr>
-							<tr><td>Gross Salary </td><td class="text-right">12,000.00</td><td class="text-right">12,000.00</td></tr>
+							<tr><td>Wages</td><td class="text-right">0</td><td class="text-right">0</td></tr>
+							<tr><td>Basic Salary</td><td class="text-right">0</td><td class="text-right">0</td></tr>
+							<tr><td>House Rent Allowance</td><td class="text-right">0</td><td class="text-right">0</td></tr>
+							<tr><td>Gross Salary </td><td class="text-right">0</td><td class="text-right">0</td></tr>
 							</table>
 							</td>
 							<td style="width:50%;border-right:0px;padding:0px;vertical-align: top;">
 							<table style="width:100%;">
 							<tr style="border-bottom:1px solid #333;"><th>Deductions</th><th class="text-right">YID</th><th class="text-right">Amount</th></tr>
-							<tr><td>Provident Fund</td><td class="text-right">576.00</td><td class="text-right">576.00</td></tr>
-							<tr><td>Employees State Insurance </td><td class="text-right">480.00</td><td class="text-right">480.00</td></tr>
-							<tr><td>Advance</td><td class="text-right">1,000.00</td><td class="text-right">1,000.00</td></tr>
-							<tr><td>Uniform</td><td class="text-right">600.00</td><td class="text-right">600.00</td></tr>
-							<tr><td>Fine (Penalty) </td><td class="text-right">387.09</td><td class="text-right">387.09</td></tr>
+							<tr><td>Provident Fund</td><td class="text-right">0</td><td class="text-right">0</td></tr>
+							<tr><td>Employees State Insurance </td><td class="text-right">0</td><td class="text-right">0</td></tr>
+							<tr><td>Advance</td><td class="text-right">0</td><td class="text-right">0</td></tr>
+							<tr><td>Uniform</td><td class="text-right">0</td><td class="text-right">0</td></tr>
+							<tr><td>Fine (Penalty) </td><td class="text-right">0</td><td class="text-right">0</td></tr>
 							</table>
 							</td>
 							</tr>
 							<tr>
 							<td style="width:50%;border-left:0px;padding:0px;vertical-align: top;">
 							<table style="width:100%;">
-							<tr style=""><th>Total Earnings</th><th class="text-right">12,000.00</th><th class="text-right"> 12,000.00</th></tr>
+							<tr style=""><th>Total Earnings</th><th class="text-right">12,000.00</th><th class="text-right"> 0</th></tr>
 							</table>
 							</td>
 							<td style="width:50%;border-right:0px;padding:0px;vertical-align: top;">
 							<table style="width:100%;">
-							<tr style=""><th>Total Deductions</th><th class="text-right">3,043.09</th><th class="text-right">3,043.09</th></tr>
+							<tr style=""><th>Total Deductions</th><th class="text-right">0</th><th class="text-right">0</th></tr>
 							</table>
 							</td>
 							</tr>
@@ -131,7 +131,7 @@
 							</td>
 							<td style="width:50%;border:0px;padding:0px;vertical-align: top;">
 							<table style="width:100%;">
-							<tr style=""><th>Net Pay (Rounded)</th><th class="text-right">8,955.00</th></tr>
+							<tr style=""><th>Net Pay (Rounded)</th><th class="text-right">{{  round($total_salary) }}</th></tr>
 							</table>
 							</td>
 							</tr>

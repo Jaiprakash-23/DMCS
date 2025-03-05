@@ -1,3 +1,7 @@
+<?php
+use App\Models\Department;
+use App\Http\Controllers\CommonController;
+?>
 @extends('layouts.app')
 @section('content')
 @include('layouts.admin-sidebar')
@@ -17,34 +21,11 @@
 					</div>
 
 					<div class="row">
+                         <div class="col-sm-3"></div>
+                         <div class="col-sm-6">
 
-						 <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-							<div class="dash-widget clearfix card-box">
-								<span class="dash-widget-icon"><i class="fa fa-building-o"></i></span>
-								<div class="dash-widget-info">
-									<h3> 39,698.00</h3>
-									<span> Total Payable </span>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-							<div class="dash-widget clearfix card-box">
-								<span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
-								<div class="dash-widget-info">
-									<h3>23,350.00</h3>
-									<span>Paid Salary</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-							<div class="dash-widget clearfix card-box">
-								<span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-								<div class="dash-widget-info">
-									<h3>16,348.00</h3>
-									<span> Total Unpaid Salary </span>
-								</div>
-							</div>
-						</div>
+                         </div>
+                         <div class="col-sm-3"></div>
 					</div>
 
 					<div class="row">
@@ -63,30 +44,41 @@
 											</tr>
 									</thead>
 									<tbody>
-                                        @foreach ($all_empl_salary as $emp_salary)
+                                        @foreach ($emp as $emps)
+                                        @php
+                                        $comm=new CommonController();
+                                        $total_salary=$comm->getSalary($emps->id,date("Y-m-d"));
+                                            $departmentname = Department::where('id', $emps->department)->first()
+                                            ->department;
+                                        @endphp
 										<tr>
-
 											<td>
-
-
-
 												<h2 class="table-avatar">
-													<a href="profile.html" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
-													<a href="profile.html">{{$emp_salary->fullname}} <span>Web Designer</span></a>
+													<a href="" class="avatar"><img alt="" src="assets/img/profiles/avatar-02.jpg"></a>
+													<a href="">{{ $emps->fullname }} <span> {{ $departmentname  }} </span></a>
 												</h2>
 											</td>
-											<td>{{$emp_salary->emp_id}}</td>
-											<td>1 Oct 2019</td>
-											<td> {{$emp_salary->salary_month}}</td>
-                                            <td> {{$emp_salary->net_pay}} </td>
-                                            <td> 2000 </td>
+											<td>{{ $emps->emp_id }}</td>
+											<td>{{ date("d M Y",strtotime($emps->date_of_joining)) }}</td>
+											<td></td>
+											<td></td>
+                                            <td></td>
+											<td>{{ round($total_salary,2) }}</td>
+											<td><a class="btn btn-sm btn-primary" href="{{ route('salary_slip',['id'=>$emps->id,'date'=>date("Ymd")]) }}">Generate Slip</a></td>
 											<td class="text-right">
-
-													<a href="salary-genrate.php" class="action-icon"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-
-												</td>
+												<div class="dropdown dropdown-action">
+													<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+													<div class="dropdown-menu dropdown-menu-right">
+														<a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+														<a class="dropdown-item" href="salary-slip.php" ><i class="fa fa-eye m-r-5"></i> View</a>
+													</div>
+												</div>
+											</td>
 										</tr>
+
+
                                         @endforeach
+
 									</tbody>
 								</table>
 							</div>
@@ -95,5 +87,5 @@
                 </div>
 
 				 </div>
-			<!-- /Page Wrapper -->
+			<!-- /Page Wrappe
 @endsection
