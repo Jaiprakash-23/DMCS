@@ -23,7 +23,15 @@ use App\Http\Controllers\CommonController;
 					<div class="row">
                          <div class="col-sm-3"></div>
                          <div class="col-sm-6">
-
+                          <div class="card">
+                            <div class="card-header">Select Month</div>
+                            <div class="card-body">
+                                <form action="" method="post">
+                                    @csrf
+                                    <input type="month" id="month" name="month" class="form-control" required>
+                                </form>
+                            </div>
+                          </div>
                          </div>
                          <div class="col-sm-3"></div>
 					</div>
@@ -37,9 +45,10 @@ use App\Http\Controllers\CommonController;
 											<th> Employee Name</th>
 											<th> Employee ID </th>
                                             <th> Month  </th>
-                                            <th> Payable </th>
+                                            <th>Amount</th>
+                                            {{-- <th> Payable </th>
                                             <th> Paid  </th>
-                                            <th> Unpaid  </th>
+                                            <th> Unpaid  </th> --}}
                                             <th class="text-right"> Action </th>
 											</tr>
 									</thead>
@@ -62,7 +71,6 @@ use App\Http\Controllers\CommonController;
 											<td>{{ date("d M Y",strtotime($emps->date_of_joining)) }}</td>
 											<td></td>
 											<td></td>
-                                            <td></td>
 											<td>{{ round($total_salary,2) }}</td>
 											<td><a class="btn btn-sm btn-primary" href="{{ route('salary_slip',['id'=>$emps->id,'date'=>date("Ymd")]) }}">Generate Slip</a></td>
 											<td class="text-right">
