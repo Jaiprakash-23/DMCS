@@ -26,7 +26,7 @@ use App\Http\Controllers\CommonController;
                           <div class="card">
                             <div class="card-header">Select Month</div>
                             <div class="card-body">
-                                <form action="" method="post">
+                                <form action="#" method="post">
                                     @csrf
                                     <input type="month" id="month" name="month" class="form-control" required>
                                 </form>
