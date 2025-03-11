@@ -10,6 +10,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\CommonController;
 
 
@@ -28,7 +29,7 @@ Route::get('/all/site_name&salary',[ReportsController::class,'all_employee_siten
 
 //InformationController
 Route::get('/my_profile',[InformationController::class,'my_profile'])->name('my_profile');
-Route::get('/my_attendance',[InformationController::class,'my_attendance'])->name('my_attendance');
+// Route::get('/my_attendance',[InformationController::class,'my_attendance'])->name('my_attendance');
 Route::get('/my_salary',[InformationController::class,'my_salary'])->name('my_salary');
 
 //AttendanceController
@@ -40,6 +41,8 @@ Route::get('/officer_attendance',[AttendanceController::class,'officer_attendanc
 Route::get('/transfer',[AttendanceController::class,'transfer'])->name('transfer');
 
 Route::get('/attendance/list/{id}',[AttendanceController::class,'AttendanceList'])->name('attendance_list');
+
+Route::get("my-attendance",[AttendanceController::class,'MyAttendance'])->name('my_attendance');
 
 
 
@@ -87,5 +90,10 @@ Route::get('/get-sites/{area}', [SettingController::class, 'getSites']);
 Route::post('/get_designation',[CommonController::class,'GetDesignation'])->name('get_designation');
 
 Route::post('/present_absent',[CommonController::class,'PresentAbsent'])->name('present_absent');
+
+// LeaveController coding with sanchit singh
+
+Route::get('/apply-leave',[LeaveController::class,'ApplyLeave'])->name('apply_leave');
+Route::post('/apply_leave_save',[LeaveController::class,'ApplyLeaveSave'])->name('apply_leave_save');
 
 

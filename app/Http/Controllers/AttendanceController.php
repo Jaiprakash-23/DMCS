@@ -46,4 +46,8 @@ class AttendanceController extends Controller
         }
         return view('attendance_list',compact('department_name','employee'));
     }
+
+    public function MyAttendance(){
+        return view('my-attendance');
+    }
 }

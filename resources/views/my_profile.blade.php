@@ -89,7 +89,7 @@
 							<div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
 								<ul class="nav nav-tabs nav-tabs-bottom">
 									<li class="nav-item"><a href="#emp_profile" data-toggle="tab" class="nav-link active">My Profile</a></li>
-									<li class="nav-item"><a href="my-attendance.php" class="nav-link"> My Attendance </a></li>
+									<li class="nav-item"><a href="{{ route('my_attendance') }}" class="nav-link"> My Attendance </a></li>
 									<li class="nav-item"><a href="salary-slip.php"  class="nav-link">My Salary </a></li>
 								</ul>
 							</div>

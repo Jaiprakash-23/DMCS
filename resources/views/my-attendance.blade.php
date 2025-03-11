@@ -148,7 +148,7 @@
 												</div>
 											</div>
 											<div class="request-btn">
-												<a class="btn btn-primary" href="#">Apply Leave</a>
+												<a class="btn btn-primary" href="{{ route('apply_leave') }}">Apply Leave</a>
 											</div>
 										</div>
 								</div>
