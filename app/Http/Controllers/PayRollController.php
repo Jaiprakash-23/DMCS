@@ -48,4 +48,14 @@ class PayRollController extends Controller
         return view('salary-slip',compact('total_salary','emp','department_emp','designation_emp','month','total_working_days'));
     }
 
+    public function SalaryGetMonthWise(Request $request){
+        $year=date("Y",strtotime($request->month));
+        $month=date("m",strtotime($request->month));
+        $firstDate = date('Y-m-01', strtotime("$year-$month-01"));
+        $lastDate = date('Y-m-t', strtotime("$year-$month-01"));
+        $emp=AllEmployeeEmp::get();
+        return view('allemp_salary',compact('emp','firstDate','lastDate'));
+
+    }
+
 }

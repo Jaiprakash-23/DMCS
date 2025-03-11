@@ -26,12 +26,24 @@ use App\Http\Controllers\CommonController;
                           <div class="card">
                             <div class="card-header">Select Month</div>
                             <div class="card-body">
-                                <form action="#" method="post">
+                                <form action="{{ route('salary_get_month_wise') }}" method="get">
                                     @csrf
-                                    <input type="month" id="month" name="month" class="form-control" required>
+                                    <input type="month" id="month" name="month" class="form-control" max="<?php echo date("Y-m"); ?>" required>
+                                    <div class="mt-3">
+                                        <input type="submit" class="btn btn-primary" value="Submit">
+                                    </div>
+                                    <div class="mt-3">
+                                        <a href="{{ route('emp_salary_report') }}"><input type="button" class="btn btn-primary" value="Current Month"></a>
+                                    </div>
+
                                 </form>
                             </div>
                           </div>
+                          @if (isset($firstDate))
+                             <h4>Month Name:- {{ date("M, Y",strtotime($firstDate)) }}</h4>
+                         @else
+                             <h4> Month Name:- {{ date("M, Y") }}</h4>
+                          @endif
                          </div>
                          <div class="col-sm-3"></div>
 					</div>
@@ -46,17 +58,24 @@ use App\Http\Controllers\CommonController;
 											<th> Employee ID </th>
                                             <th> Month  </th>
                                             <th>Amount</th>
-                                            {{-- <th> Payable </th>
-                                            <th> Paid  </th>
-                                            <th> Unpaid  </th> --}}
                                             <th class="text-right"> Action </th>
 											</tr>
 									</thead>
 									<tbody>
                                         @foreach ($emp as $emps)
+                                        @if(isset($firstDate))
+                                            @php
+                                            $date=$firstDate;
+                                            @endphp
+                                        @else
+                                            @php
+                                            $date=date("Y-m-d");
+                                            @endphp
+                                        @endif
                                         @php
                                         $comm=new CommonController();
-                                        $total_salary=$comm->getSalary($emps->id,date("Y-m-d"));
+
+                                        $total_salary=$comm->getSalary($emps->id,$date);
                                             $departmentname = Department::where('id', $emps->department)->first()
                                             ->department;
                                         @endphp
@@ -69,10 +88,8 @@ use App\Http\Controllers\CommonController;
 											</td>
 											<td>{{ $emps->emp_id }}</td>
 											<td>{{ date("d M Y",strtotime($emps->date_of_joining)) }}</td>
-											<td></td>
-											<td></td>
 											<td>{{ round($total_salary,2) }}</td>
-											<td><a class="btn btn-sm btn-primary" href="{{ route('salary_slip',['id'=>$emps->id,'date'=>date("Ymd")]) }}">Generate Slip</a></td>
+											<td><a class="btn btn-sm btn-primary" href="{{ route('salary_slip',['id'=>$emps->id,'date'=>date("Ymd",strtotime($date))]) }}">Generate Slip</a></td>
 											<td class="text-right">
 												<div class="dropdown dropdown-action">
 													<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
