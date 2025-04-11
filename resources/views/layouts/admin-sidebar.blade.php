@@ -264,7 +264,7 @@
                     <!--<a class="dropdown-item" href="my_profile.php"> My Profile </a>
                         <a class="dropdown-item" href="my-attendance.php"> My Attendance </a>
                         <a class="dropdown-item" href="settings.html">Settings</a> -->
-                    <a class="dropdown-item" href="login.php"> Logout </a>
+                    <a class="dropdown-item" href="{{route('login')}}"> Logout </a>
                 </div>
             </li>
         </ul>

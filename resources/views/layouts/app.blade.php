@@ -10,7 +10,7 @@
 
     <title>{{ config('app.name', 'DMCS') }}</title>
     <link rel="icon" href="img/favicon.png" sizes="32x32" />
-    <meta name="description" content="Online Information of Temples, Festivals, Vrats, Darshan, Chalisa, Aarti of Hanuman, Ganesh, Lakshmi, Durga, Shiva, Vishnu, Gods &amp; Goddesses" />
+    <meta name="description" content="Duty Management System" />
     <!-- Fonts -->
     <!-- <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> -->

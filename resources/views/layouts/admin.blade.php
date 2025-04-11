@@ -7,9 +7,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Shri Dharam') }} - Admin</title>
+    <title>{{ config('app.name', 'Duty Management System') }} - Admin</title>
     <link rel="icon" href="img/favicon.png" sizes="32x32" />
-    <meta name="description" content="Online Information of Temples, Festivals, Vrats, Darshan, Chalisa, Aarti of Hanuman, Ganesh, Lakshmi, Durga, Shiva, Vishnu, Gods &amp; Goddesses" />
+    <meta name="description" content="Duty Management System" />
     <!-- Fonts -->
     <!-- <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> -->
@@ -58,7 +58,7 @@
                 <footer class="footer">
                   <div class="container-fluid d-flex justify-content-center">
                     <div class="copyright">
-                      2024, Shri Dharam | All Rights Reserved
+                      2024, Duty Management System | All Rights Reserved
                     </div>
                   </div>
                 </footer>

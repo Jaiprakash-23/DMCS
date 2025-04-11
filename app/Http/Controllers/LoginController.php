@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\AllEmployeeEmp;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
@@ -20,16 +21,19 @@ class LoginController extends Controller
     public function LoginMatch(Request $request){
 
        $data= $request->validate([
-                    "email"=>"required|exists:users,email",
+                    "email"=>"required|email",
                     "password"=>"required",
         ]);
-        dd($data);
-        $user=User::where("email",$data['email'])->first();
-        if($user && Hash::check($data['password'],$user->password)){
-                  Auth::login($user);
-                  $role=Auth::user()->role->name;
+
+        $user=AllEmployeeEmp::where("email",$data['email'])->first();
+
+        // if($user && Hash::check($data['password'],$user->password)){
+        if($user->email==$data['email'] && $user->phone==$data['password']){
+                //   Auth::login();
+                  $role=$user->designation;
+                //   dd($role);
                   switch($role){
-                    case "admin":return redirect()->route("admin.dashboard")->with("success","Login Successful");
+                    case "7":return redirect()->route("admin.dashboard")->with("success","Login Successful");
                     case "super_admin":return redirect()->route("super_admin.dashboard")->with("success","Login Successful");
                     case "user":return redirect()->route("user.dashboard")->with("success","Login Successful");
                     case "vendor":return redirect()->route("vendor.dashboard")->with("success","Login Successful");

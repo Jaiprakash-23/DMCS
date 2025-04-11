@@ -2,4 +2,4 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::get('/dashboard', [App\Http\Controllers\Auth\LoginController::class, 'admin_dashboard'])->name('admin.dashboard')->withoutMiddleware('guest');
+Route::get('/dashboard', [App\Http\Controllers\Auth\LoginController::class, 'admin_dashboard'])->name('dashboard')->withoutMiddleware('guest');
