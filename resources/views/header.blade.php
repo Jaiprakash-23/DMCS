@@ -8,7 +8,6 @@
         <meta name="author" content="Balram Agarwal">
         <meta name="robots" content="noindex, nofollow">
         <title> Duty Management & Control System |DMCS </title>
-
 		 <link rel="shortcut icon" type="image/x-icon" href="{{asset('dashboard/img/favicon.png')}}">
 
 		<!-- Bootstrap CSS -->
