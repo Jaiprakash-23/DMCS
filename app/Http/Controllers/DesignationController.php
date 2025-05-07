@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Designation;
-use App\Models\Department;
+
 
 class DesignationController extends Controller
 {

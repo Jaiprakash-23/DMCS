@@ -36,7 +36,7 @@
                                         <tr>
 											<td>
 												<h2 class="table-avatar">
-													<a href="#"> Ca</a>
+													<a href="#">{{ $sitesalary->area }}</a>
 												</h2>
 											</td>
 											<td> ₹ 12000 </td>

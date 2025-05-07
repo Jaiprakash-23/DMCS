@@ -7,940 +7,495 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
 
-        <!-- Page Content -->
-        <div class="content container-fluid" id="add-profile-view">
+    
 
-            <!-- Page Title -->
-            <div class="row">
-                <div class="col-sm-12">
-                    <h4 class="page-title">My Profile</h4>
+<div class="bg-gray-50" x-data="{ activeTab: 'profile' }">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Add New Employee</h1>
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                        <li class="inline-flex items-center">
+                            <a href="#" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600">
+                                <i class="fas fa-home mr-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li aria-current="page">
+                            <div class="flex items-center">
+                                <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Add Employee</span>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+                
+            </div>
+        </div>
+        @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+        <!-- Main Form -->
+        <form action="{{route('save_employee')}}" method="post" class="bg-white rounded-xl shadow-md overflow-hidden" enctype="multipart/form-data">
+            @csrf
+            <!-- Profile Section -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6 w-full">
+                    <!-- Profile Picture -->
+                    <div class="relative group">
+    <!-- Profile Image Container -->
+    <div class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+        <!-- Current Profile Image -->
+        <img id="profileImage" class="w-full h-full object-cover" 
+             src="{{ asset('storage/' .$employee?->profile_image ) }}" 
+             alt="Profile Picture">
+        
+        <!-- Image Upload Overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
+            <span class="text-white text-sm font-medium">
+                <i class="fas fa-camera mr-1"></i> Change
+            </span>
+        </div>
+    </div>
+    
+    <!-- File Input -->
+    <div class="mt-3 text-center">
+        <label class="inline-block cursor-pointer">
+            <span class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md transition-colors duration-300 inline-flex items-center">
+                <i class="fas fa-camera mr-1"></i> Change Photo
+            </span>
+            <input type="file" id="profileUpload" name="image" class="hidden" accept="image/*">
+        </label>
+    </div>
+</div>
+
+<!-- JavaScript for Image Preview -->
+<script>
+document.getElementById('profileUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById('profileImage').src = event.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+                    
+                    <!-- Basic Info -->
+                    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full ">
+                        
+                        <div class="col-span-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Full Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="name" value="{{ $employee?->fullname }}"  class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Full Name">
+                            @error('name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Department <span class="text-red-500">*</span></label>
+                            <select name="department" id="department" onchange="selectDesignation()" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" >
+                                <option value="">Select Department</option>
+                                @foreach ($department as $d)
+                                    @if ($d->department != 'Admin')
+                                    <option value="{{ $d?->id }}" {{ $d?->id == $employee?->department ? 'selected' : '' }}>
+                                     {{ $d?->department }}
+                                     </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Designation <span class="text-red-500">*</span></label>
+                            <select name="designation" id="designation" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                <option value="{{ $employee?->designation }}">Select Designation</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                       
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Site Location <span class="text-red-500">*</span></label>
+                            <select name="location_site" id="location_site" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                <option value="">Select Site</option>
+                                @foreach ($location_site as $ls)
+                                    <option value="{{ $ls?->id }}" {{ $ls?->id == $employee?->site ? 'selected' : '' }}>
+                                     {{ $ls?->site_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Employee ID</label>
+                            <input type="text" value="{{ $new_emp_id }}" class="w-full form-input rounded-md border-gray-300 bg-gray-100 border py-1 px-1" readonly>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Joining Date <span class="text-red-500">*</span></label>
+                            <input type="date" name="joining_date" value="{{ $employee?->date_of_joining }}"  class="w-full form-input rounded-md border-gray-300 border py-1 px-1" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Reports To <span class="text-red-500">*</span></label>
+                            <select name="report_id" id="report_id" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                <option value="{{ $employee?->reports_to }}">Report to</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- /Page Title -->
-            <form action="{{route('save_employee')}}" method="post">
-                @csrf
-                <div class="card-box mb-0">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="profile-view">
-                                <div class="profile-img-wrap edit-img">
-                                    <img class="inline-block" src="assets/img/profiles/avatar-02.jpg" alt="user">
-                                    <div class="fileupload btn">
-                                        <span class="btn-text">edit</span>
-                                        <input class="upload" type="file">
+
+            <!-- Contact Info Section -->
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Contact Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="number" name="contact" value="{{ $employee?->phone }}" id="contact" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Phone Number">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" name="email" id="email" value="{{ $employee?->email }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Email">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                        <input type="date" name="dob" value="{{ $employee?->date_of_birth }}" id="dob" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                        <select name="gender" id="gender" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                            <option value="male" selected>Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                        <textarea name="address" id="address" value="{{ $employee?->address }}" rows="2" class="w-full form-input rounded-md border-gray-300 border py-1 px-1"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="border-b border-gray-200">
+                <nav class="flex">
+                    <button type="button" @click="activeTab = 'profile'" 
+                            :class="{ 'border-b-2 border-blue-500 text-blue-600': activeTab === 'profile', 'text-gray-500 hover:text-gray-700': activeTab !== 'profile' }" 
+                            class="px-4 py-3 text-sm font-medium">
+                        Personal Details
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-6">
+                <!-- Personal Information Tab -->
+                <div x-show="activeTab === 'profile'" class="space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Personal Details -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-md font-semibold text-gray-800 mb-3">Personal Details</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Aadhaar Number</label>
+                                    <input type="number" name="aadhar_no" value="{{ $employee?->aadhaar_no }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Aadhar Number">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Voter ID Number</label>
+                                    <input type="text" name="voter_id_no" value="{{ $employee?->voter_id }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Voter ID Number">
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
+                                        <input type="text" name="nantionality" value="{{ $employee?->nationality }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Indian">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Religion</label>
+                                        <input type="text" name="religion" value="{{ $employee?->religion }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Hindu">
                                     </div>
                                 </div>
-                                <div class="profile-basic">
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <div class="profile-info-left">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" placeholder="Full Name"
-                                                        name="name">
-                                                        @error('name')
-                                                         <div class="text-danger" >{{ $message }}</div>
-                                                        @enderror
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="select" onchange="selectDesignation()" id="department"
-                                                        name="department" required>
-                                                        <option value="">Select Department</option>
-                                                        @foreach ($department as $d)
-                                                            @if ($d->department != 'Admin')
-                                                                <option value="{{ $d->id }}">{{ $d->department }}
-                                                                </option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <script>
-                                                    function selectDesignation() {
-                                                        var department_id = $("#department").val();
-                                                        // console.log(department_id);
-                                                        $.ajax({
-                                                            url: "{{ route('get_designation') }}",
-                                                            type: 'POST',
-                                                            data: {
-                                                                'department_id': department_id,
-                                                                "_token": "{{ csrf_token() }}"
-                                                            },
-                                                            success: function(response) {
-                                                                $('#designation').empty();
-                                                                $('#report_id').empty();
-                                                                console.log(response.report_data.id);
-                                                                if (response.designation && response.designation.length > 0) {
-                                                                    $('#designation').append('<option value="">Select Designation</option>');
-                                                                    $.each(response.designation, function(index, designation) {
-                                                                        $('#designation').append('<option value="' + designation.id + '">' +
-                                                                            designation
-                                                                            .designation + '</option>');
-                                                                    });
-                                                                }
-                                                                if (response.report_data) {
-                                                                    $('#report_id').append('<option value="">Report to</option>');
-
-                                                                    $('#report_id').append('<option value="' + response.report_data.id + '">' + response
-                                                                        .report_data
-                                                                        .department + '</option>');
-                                                                }
-                                                            },
-
-                                                        });
-                                                    }
-                                                </script>
-
-                                                <div class="form-group">
-                                                    <select class="select" id="designation" name="designation" required>
-                                                        <option value="">Select Designation</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="select" name="location_site" id="location_site" required>
-                                                        <option value="">Select Site </option>
-                                                        @foreach ($location_site as $ls)
-                                                            <option value="{{ $ls->id }}">{{ $ls->site_name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" value="{{ $new_emp_id }}"
-                                                        placeholder="Employee ID" readonly required>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <input class="form-control datetimepicker" type="date" name="joining_date"
-                                                        placeholder="Date of joining" required>
-                                                </div>
-
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <select class="select" id="report_id" name="report_id" required>
-                                                            <option>Reports to</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Marital Status</label>
+                                    <select name="marital_status" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                        <option value="single">Single</option>
+                                        <option value="married">Married</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Identity Mark</label>
+                                    <input type="text" name="identity_mark" value="{{ $employee?->identity_mark }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Left hand black mark">
+                                </div>
+                                
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Blood Group</label>
+                                        <input type="text" name="blood_group" value="{{ $employee?->blood_group }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="A+">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Height</label>
+                                        <input type="text" name="height_weight" value="{{ $employee?->height_weight }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="169cm">
+                                    </div>
+                                    
+                                    <!-- <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+                                        <input type="text" value="{{ $employee?->religion }}" class="w-full form-input  rounded-md border-gray-300 border py-1 px-1" placeholder="70kg">
+                                    </div> -->
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Skin Color</label>
+                                    <input type="text" name="color_of_skin" value="{{ $employee?->colour_of_skin }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" placeholder="Undertones (हल्का रंग)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Emergency Contacts -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-md font-semibold text-gray-800 mb-3">Emergency Contacts</h4>
+                            <div class="space-y-6">
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-700 mb-2">Primary Contact</h5>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Name</label>
+                                            <input type="text" name="primary_name" value="{{ $employee?->emergency_name }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
                                         </div>
-                                        <div class="col-md-7">
-                                            <ul class="personal-info">
-                                                <li>
-                                                    <div class="title">Phone:</div>
-                                                    <div class="text">
-                                                        <div class="form-group">
-                                                            <input type="number" class="form-control" name="contact"
-                                                                id="contact" placeholder="Phone Number">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">Email:</div>
-                                                    <div class="text">
-                                                        <div class="form-group">
-                                                            <input type="email" class="form-control" name="email"
-                                                                id="email" placeholder="Email">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">Birthday:</div>
-                                                    <div class="text">
-                                                        <div class="form-group">
-                                                            <input type="date" class="form-control datetimepicker"
-                                                                name="dob" id="dob" placeholder="Date Of Birth">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">Gender:</div>
-                                                    <div class="text">
-                                                        <div class="form-group">
-                                                            <select class="select" name="gender" id="gender">
-                                                                <option value="male" selected>Male</option>
-                                                                <option value="female">Female</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">Address:</div>
-                                                    <div class="text">
-                                                        <div class="form-group">
-                                                            <textarea name="address" id="address" cols="1" rows="1" class="form-control"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </li>
-
-
-                                            </ul>
+                                        
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Relationship</label>
+                                            <input type="text" name="relationship" value="{{ $employee?->emergency_relationship }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Phone</label>
+                                            <input type="text" name="primary_contact" value="{{ $employee?->emergency_phone }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-box tab-box">
-                    <div class="row user-tabs">
-                        <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
-                            <ul class="nav nav-tabs nav-tabs-bottom">
-                                <li class="nav-item"><a href="#emp_profile" data-toggle="tab"
-                                        class="nav-link active">Profile</a></li>
-                                <!--<li class="nav-item"><a href="#bank_statutory" data-toggle="tab" class="nav-link">Bank & Statutory <small class="text-danger">(Admin Only)</small></a></li>-->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content">
-
-                    <!-- Profile Info Tab -->
-                    <div id="emp_profile" class="pro-overview tab-pane fade show active">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card-box profile-box">
-                                    <h3 class="card-title">Personal Informations </h3>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Aadhaar Number</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input type="number" class="form-control" id="aadhar_no" name="aadhar_no" placeholder="Aadhar Number">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Voter Id Number </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control datetimepicker" name="voter_id_no" id="voter_id_no" placeholder="Voter Id Number">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Nationality </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" name="nantionality" id="nantionality" placeholder="Indian">
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="title">Religion</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="religion" id="religion" placeholder="Hindu">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Marital status</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <select class="select form-control" name="marital_status" id="marital_status">
-                                                        <option value="single">Single</option>
-                                                        <option value="married">Married</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Identity Mark</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="identity_mark" id="identity_mark" placeholder="left hand black mark">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title"> Blood Group </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="blood_group" placeholder="A+">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title"> Height & Wight </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="height_wight" placeholder="169cm , 70kg">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title"> Colour Of Skin </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="color_of_skin" placeholder="Undertones ( हल्का रंग )">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card-box profile-box">
-                                    <h3 class="card-title">Emergency Contact </h3>
-                                    <h5 class="section-title">Primary</h5>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Name</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="primary_name">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Relationship</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="relationship">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Phone </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="primary_contact">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <hr>
-                                    <h5 class="section-title">Secondary</h5>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Name</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="secondary_name">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Relationship</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="secondary_relationship">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Phone </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="secondry_contact">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card-box profile-box">
-                                    <h3 class="card-title">Bank information</h3>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Bank name</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="bank_name">
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="title">Bank account No.</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="number" name="account_no">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">IFSC Code</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="ifcs_code">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">PAN No</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="pan_no">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card-box profile-box">
-                                    <h3 class="card-title">Family Members</h3>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Name</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="family_member_name">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Relationship</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="family_member_relation">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Phone </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="number" name="family_member_contact">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Address </div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <textarea name="family_member_address" id="family_member_address" cols="1" rows="1"></textarea>
-
-                                                </div>
-                                            </div>
-                                        </li>
-
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card-box profile-box">
-                                    <h3 class="card-title">Educational Information </h3>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Institution</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="institution">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Degree</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="degree">
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="title">Grade</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text" name="grade">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Starting Date</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control datetimepicker" type="date" name="starting_date">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Completion Date</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control datetimepicker" type="date" name="completion_date">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <hr>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Institution</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Degree</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="title">Grade</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Starting Date</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control datetimepicker" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Completion Date</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control datetimepicker" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <hr>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Institution</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Degree</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="title">Grade</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Starting Date</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control datetimepicker" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Completion Date</div>
-                                            <div class="text">
-                                                <div class="form-group">
-                                                    <input class="form-control datetimepicker" type="text">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card-box profile-box">
-                                    <h3 class="card-title">Experience </h3>
-                                    <div class="experience-box">
-                                        <ul class="personal-info">
-                                            <li>
-                                                <div class="title">Company Name</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="title">Location</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="title">Job Position</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="title">Period From</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control datetimepicker" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="title">Period To</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control datetimepicker" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                        </ul>
-                                        <hr>
-                                        <ul class="personal-info">
-                                            <li>
-                                                <div class="title">Company Name</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="title">Location</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="title">Job Position</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="title">Period From</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control datetimepicker" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="title">Period To</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control datetimepicker" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                        </ul>
-                                        <hr>
-                                        <ul class="personal-info">
-                                            <li>
-                                                <div class="title">Company Name</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="title">Location</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="title">Job Position</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="title">Period From</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control datetimepicker" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="title">Period To</div>
-                                                <div class="text">
-                                                    <div class="form-group">
-                                                        <input class="form-control datetimepicker" type="text">
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                        </ul>
-
+                                
+                                <div class="border-t border-gray-200 pt-4">
+                                    <h5 class="text-sm font-medium text-gray-700 mb-2">Secondary Contact</h5>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Name</label>
+                                            <input type="text" name="secondary_name" value="{{ $employee?->emergency_name1 }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Relationship</label>
+                                            <input type="text" name="secondary_relationship" value="{{ $employee?->emergency_relationship1 }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-500 mb-1">Phone</label>
+                                            <input type="text" name="secondry_contact" value="{{ $employee?->emergency_phone1 }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- /Profile Info Tab -->
+                    
+                    <!-- Bank & Family Info -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Bank Information -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-md font-semibold text-gray-800 mb-3">Bank Information</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Bank Name</label>
+                                    <input type="text" name="bank_name" value="{{ $employee?->bank_name }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+                                        <input type="number" name="account_no" value="{{ $employee?->bank_account_no }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">IFSC Code</label>
+                                        <input type="text" name="ifcs_code" value="{{ $employee?->bank_ifsc }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">PAN Number</label>
+                                    <input type="text" name="pan_no" value="{{ $employee?->pan_no }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Family Information -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-md font-semibold text-gray-800 mb-3">Family Information</h4>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                        <input type="text" name="family_member_name" value="{{ $employee?->family_mem_name }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+                                        <input type="text" name="family_member_relation" value="{{ $employee?->family_mem_relationship }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                    <input type="number" name="family_member_contact" value="{{ $employee?->family_mem_phone }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                    <textarea name="family_member_address" rows="2" value="{{ $employee?->family_mem_address }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Education & Experience -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Education -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-md font-semibold text-gray-800">Education</h4>
+                                <button type="button" class="text-blue-600 text-sm font-medium">
+                                    <i class="fas fa-plus mr-1"></i> Add More
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+                                    <input type="text" name="institution" value="{{ $employee?->institution }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
+                                        <input type="text" name="degree" value="{{ $employee?->degree }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Grade</label>
+                                        <input type="text" name="grade" value="{{ $employee?->grade }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                                        <input type="date" name="starting_date" value="{{ $employee?->starting_date }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                                        <input type="date" name="completion_date" value="{{ $employee?->completion_date }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                        <input type="text" name="id" value="{{ $employee?->id }}" class="w-full form-input rounded-md border-gray-300 border py-1 px-1" hidden>
+                                    </div>
+                                </div>
+                            </div>
 
-
-
-                    <!-- Bank Statutory Tab -->
-                    <!--<div class="tab-pane fade" id="bank_statutory">
-               <div class="card">
-                <div class="card-body">
-                 <h3 class="card-title"> Basic Salary Information</h3>
-                 <form>
-                  <div class="row">
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Salary basis <span class="text-danger">*</span></label>
-                     <select class="select">
-                      <option>Select salary basis type</option>
-                      <option>Hourly</option>
-                      <option>Daily</option>
-                      <option>Weekly</option>
-                      <option>Monthly</option>
-                     </select>
-                   </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Salary amount <small class="text-muted">per month</small></label>
-                     <div class="input-group">
-                      <div class="input-group-prepend">
-                       <span class="input-group-text">$</span>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Type your salary amount" value="0.00">
-                     </div>
+                        </div>
+                        
+                        <!-- Experience -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-md font-semibold text-gray-800">Experience</h4>
+                                <button type="button" class="text-blue-600 text-sm font-medium">
+                                    <i class="fas fa-plus mr-1"></i> Add More
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                                    <input type="text" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Job Position</label>
+                                    <input type="text" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">From</label>
+                                        <input type="date" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">To</label>
+                                        <input type="date" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Payment type</label>
-                     <select class="select">
-                      <option>Select payment type</option>
-                      <option>Bank transfer</option>
-                      <option>Check</option>
-                      <option>Cash</option>
-                     </select>
-                   </div>
-                   </div>
-                  </div>
-                  <hr>
-                  <h3 class="card-title"> PF Information</h3>
-                  <div class="row">
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">PF contribution</label>
-                     <select class="select">
-                      <option>Select PF contribution</option>
-                      <option>Yes</option>
-                      <option>No</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">PF No. <span class="text-danger">*</span></label>
-                     <select class="select">
-                      <option>Select PF contribution</option>
-                      <option>Yes</option>
-                      <option>No</option>
-                     </select>
-                    </div>
-                   </div>
-                  </div>
-                  <div class="row">
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Employee PF rate</label>
-                     <select class="select">
-                      <option>Select PF contribution</option>
-                      <option>Yes</option>
-                      <option>No</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Additional rate <span class="text-danger">*</span></label>
-                     <select class="select">
-                      <option>Select additional rate</option>
-                      <option>0%</option>
-                      <option>1%</option>
-                      <option>2%</option>
-                      <option>3%</option>
-                      <option>4%</option>
-                      <option>5%</option>
-                      <option>6%</option>
-                      <option>7%</option>
-                      <option>8%</option>
-                      <option>9%</option>
-                      <option>10%</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Total rate</label>
-                     <input type="text" class="form-control" placeholder="N/A" value="11%">
-                    </div>
-                   </div>
-                 </div>
-                  <div class="row">
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Employee PF rate</label>
-                     <select class="select">
-                      <option>Select PF contribution</option>
-                      <option>Yes</option>
-                      <option>No</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Additional rate <span class="text-danger">*</span></label>
-                     <select class="select">
-                      <option>Select additional rate</option>
-                      <option>0%</option>
-                      <option>1%</option>
-                      <option>2%</option>
-                      <option>3%</option>
-                      <option>4%</option>
-                      <option>5%</option>
-                      <option>6%</option>
-                      <option>7%</option>
-                      <option>8%</option>
-                      <option>9%</option>
-                      <option>10%</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Total rate</label>
-                     <input type="text" class="form-control" placeholder="N/A" value="11%">
-                    </div>
-                   </div>
-                  </div>
-
-                  <hr>
-                  <h3 class="card-title"> ESI Information</h3>
-                  <div class="row">
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">ESI contribution</label>
-                     <select class="select">
-                      <option>Select ESI contribution</option>
-                      <option>Yes</option>
-                      <option>No</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">ESI No. <span class="text-danger">*</span></label>
-                     <select class="select">
-                      <option>Select ESI contribution</option>
-                      <option>Yes</option>
-                      <option>No</option>
-                     </select>
-                    </div>
-                   </div>
-                  </div>
-                  <div class="row">
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Employee ESI rate</label>
-                     <select class="select">
-                      <option>Select ESI contribution</option>
-                      <option>Yes</option>
-                      <option>No</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Additional rate <span class="text-danger">*</span></label>
-                     <select class="select">
-                      <option>Select additional rate</option>
-                      <option>0%</option>
-                      <option>1%</option>
-                      <option>2%</option>
-                      <option>3%</option>
-                      <option>4%</option>
-                      <option>5%</option>
-                      <option>6%</option>
-                      <option>7%</option>
-                      <option>8%</option>
-                      <option>9%</option>
-                      <option>10%</option>
-                     </select>
-                    </div>
-                   </div>
-                   <div class="col-sm-4">
-                    <div class="form-group">
-                     <label class="col-form-label">Total rate</label>
-                     <input type="text" class="form-control" placeholder="N/A" value="11%">
-                    </div>
-                   </div>
-                 </div>
-
-                  <div class="submit-section">
-                   <button class="btn btn-primary submit-btn" type="submit">Save</button>
-                  </div>
-                 </form>
                 </div>
-               </div>
-              </div>--->
-                    <!-- /Bank Statutory Tab -->
+            </div>
 
-                </div>
-                <div class="submit-section">
-                    <button class="btn btn-primary submit-btn" type="submit">Save</button>
-                </div>
-            </form>
-        </div>
-        <!-- /Page Content -->
+            <!-- Form Footer -->
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end">
+                <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-3">
+                    Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save Employee
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function selectDesignation() {
+            var department_id = $("#department").val();
+            $.ajax({
+                url: "{{ route('get_designation') }}",
+                type: 'POST',
+                data: {
+                    'department_id': department_id,
+                    "_token": "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    $('#designation').empty();
+                    $('#report_id').empty();
+                    
+                    if (response.designation && response.designation.length > 0) {
+                        $('#designation').append('<option value="">Select Designation</option>');
+                        $.each(response.designation, function(index, designation) {
+                            $('#designation').append('<option value="' + designation.id + '">' + designation.designation + '</option>');
+                        });
+                    }
+                    
+                    if (response.report_data) {
+                        $('#report_id').append('<option value="">Report to</option>');
+                        $('#report_id').append('<option value="' + response.report_data.id + '">' + response.report_data.department + '</option>');
+                    }
+                },
+            });
+        }
+    </script>
+</div>
 
     </div>
     <!-- /Page Wrapper -->

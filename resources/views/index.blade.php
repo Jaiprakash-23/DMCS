@@ -13,7 +13,7 @@
 							 <div class="dash-widget clearfix card-box">
 								<span class="dash-widget-icon"><i class="fa fa-users"></i></span>
 								<div class="dash-widget-info">
-									<h3> 650 </h3>
+									<h3> {{ $user }} </h3>
 					      			<span> Total Employees </span>
 								</div>
 								</div>
@@ -23,7 +23,7 @@
 							<div class="dash-widget clearfix card-box">
 								<span class="dash-widget-icon"><i class="fa fa-building-o"></i></span>
 								<div class="dash-widget-info">
-									<h3> 44 </h3>
+									<h3> {{ $site }} </h3>
 									<span> Total Site </span>
 								</div>
 							</div>
@@ -41,7 +41,7 @@
 							<div class="dash-widget clearfix card-box">
 								<span class="dash-widget-icon"><i class="fa fa-user"></i></span>
 								<div class="dash-widget-info">
-									<h3>218</h3>
+									<h3>{{ $user }}</h3>
 									<span> Employees</span>
 								</div>
 							</div>

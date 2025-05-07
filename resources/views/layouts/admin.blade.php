@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
+
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,7 +14,7 @@
     <!-- Fonts -->
     <!-- <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> -->
-
+    
     <!-- Scripts -->
     @vite(['resources/sass/app.scss'])
 
@@ -45,57 +46,59 @@
     <link rel="stylesheet" href="{{ asset('dashboard/css/dashboard.css') }}" />
 
 
-</head>
-<body>
+  </head>
+
+  <body>
     <div id="app">
-        <div class="wrapper">
-            @include('layouts.admin-sidebar')
-            <div class="main-panel">
-                @include('layouts.admin-topbar')
+      <div class="wrapper">
+        @include('layouts.admin-sidebar')
+        <div class="main-panel">
+          @include('layouts.admin-topbar')
 
-                    @yield('content')
+          @yield('content')
 
-                <footer class="footer">
-                  <div class="container-fluid d-flex justify-content-center">
-                    <div class="copyright">
-                      2024, Duty Management System | All Rights Reserved
-                    </div>
-                  </div>
-                </footer>
+          <footer class="footer">
+            <div class="container-fluid d-flex justify-content-center">
+              <div class="copyright">
+                2024, Duty Management System | All Rights Reserved
+              </div>
             </div>
+          </footer>
         </div>
-        <!--   Core JS Files   -->
-        <script src="{{ asset('dashboard/js/core/jquery-3.7.1.min.js') }}"></script>
-        <script src="{{ asset('dashboard/js/core/popper.min.js') }}"></script>
+      </div>
+      <!--   Core JS Files   -->
+      <script src="{{ asset('dashboard/js/core/jquery-3.7.1.min.js') }}"></script>
+      <script src="{{ asset('dashboard/js/core/popper.min.js') }}"></script>
 
-        <script src="{{ asset('dashboard/js/plugin/bootstrap/bootstrap.bundle.min.js') }}"></script>
+      <script src="{{ asset('dashboard/js/plugin/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
-        <!-- jQuery Scrollbar -->
-        <script src="{{ asset('dashboard/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+      <!-- jQuery Scrollbar -->
+      <script src="{{ asset('dashboard/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
 
-        <!-- jQuery Sparkline -->
-        <script src="{{ asset('dashboard/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+      <!-- jQuery Sparkline -->
+      <script src="{{ asset('dashboard/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
 
-        <!-- Datatables -->
-        <script src="{{ asset('dashboard/js/plugin/datatables/datatables.min.js') }}"></script>
+      <!-- Datatables -->
+      <script src="{{ asset('dashboard/js/plugin/datatables/datatables.min.js') }}"></script>
 
-        <!-- Bootstrap Notify -->
-        <script src="{{ asset('dashboard/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+      <!-- Bootstrap Notify -->
+      <script src="{{ asset('dashboard/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 
-        <!-- Sweet Alert -->
-        <script src="{{ asset('dashboard/js/plugin/sweetalert/sweetalert2-11.js') }}"></script>
+      <!-- Sweet Alert -->
+      <script src="{{ asset('dashboard/js/plugin/sweetalert/sweetalert2-11.js') }}"></script>
 
-        <script src="{{ asset('dashboard/js/plugin/summernote/summernote-lite.min.js') }}"></script>
+      <script src="{{ asset('dashboard/js/plugin/summernote/summernote-lite.min.js') }}"></script>
 
-        <script src="{{ asset('dashboard/js/dropzone.js') }}"></script>
+      <script src="{{ asset('dashboard/js/dropzone.js') }}"></script>
 
 
-        <!-- custom JS -->
-        <script src="{{ asset('dashboard/js/shriadmin.js') }}"></script>
-        <script src="{{ asset('dashboard/js/customdropzone.js') }}"></script>
+      <!-- custom JS -->
+      <script src="{{ asset('dashboard/js/shriadmin.js') }}"></script>
+      <script src="{{ asset('dashboard/js/customdropzone.js') }}"></script>
 
-        @yield('javascript')
+      @yield('javascript')
 
     </div>
-</body>
+  </body>
+
 </html>

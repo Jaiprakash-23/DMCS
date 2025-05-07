@@ -99,7 +99,8 @@
                                             <p class="noti-details"><span class="noti-title">Misty Tison</span> added
                                                 <span class="noti-title">Domenic Houston</span> and <span
                                                     class="noti-title">Claire Mapes</span> to project <span
-                                                    class="noti-title">Doctor available module</span></p>
+                                                    class="noti-title">Doctor available module</span>
+                                            </p>
                                             <p class="noti-time"><span class="notification-time">8 mins ago</span></p>
                                         </div>
                                     </div>
@@ -264,10 +265,11 @@
                     <!--<a class="dropdown-item" href="my_profile.php"> My Profile </a>
                         <a class="dropdown-item" href="my-attendance.php"> My Attendance </a>
                         <a class="dropdown-item" href="settings.html">Settings</a> -->
-                    <a class="dropdown-item" href="{{route('login')}}"> Logout </a>
+                    <a class="dropdown-item" href="{{route('logout')}}"> Logout </a>
                 </div>
             </li>
         </ul>
+
         <!-- /Header Menu -->
 
         <!-- Mobile Menu -->
@@ -290,34 +292,35 @@
         <div class="sidebar-inner slimscroll">
             <div id="sidebar-menu" class="sidebar-menu">
                 <ul>
+                    
                     <li class="active">
                         <a href="{{ route('homepage') }}"><i class="la la-dashboard"></i> <span>Dashboard</span></a>
                     </li>
+                  
+                    @if(Auth::user()?->department == 1 || Auth::user()?->department == 2 || Auth::user()?->department == 3 || Auth::user()?->department == 4)
+                        <li class="submenu">
+                            <a href="#"><i class="la la-newspaper-o"></i> <span> Reports </span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li>
+                                    <a href="{{ route('all_employee') }}"><i class="la la-users"></i> <span> All Employee
+                                        </span></a>
+                                </li>
+                                <!-- <li>
+                                                <a href="{{ route('all_employee_attendance') }}"><i class="la la-file-powerpoint-o">
+                                                    </i> &nbsp; <span> All Employee Attendance </span></a>
+                                            </li> -->
 
+                                <li><a href="{{ route('all_employee_salary_report') }}"> <i class="la la-money"></i>
+                                        &nbsp; <span> Employee Salary Report </span></a></li>
+                                <li>
+                                    <a href="{{ route('all_employee_sitename') }}"><i class="la la-child"></i>&nbsp;
+                                        <span> Site Name & salary </span></a>
+                                </li>
 
-                    <li class="submenu">
-                        <a href="#"><i class="la la-newspaper-o"></i> <span> Reports </span> <span
-                                class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li>
-                                <a href="{{ route('all_employee') }}"><i class="la la-users"></i> <span> All Employee
-                                    </span></a>
-                            </li>
-                            <li>
-                                <a href="{{ route('all_employee_attendance') }}"><i class="la la-file-powerpoint-o">
-                                    </i> &nbsp; <span> All Employee Attendance </span></a>
-                            </li>
-
-                            <li><a href="{{ route('all_employee_salary_report') }}"> <i class="la la-money"></i>
-                                    &nbsp; <span> Employee Salary Report </span></a></li>
-                            <li>
-                                <a href="{{ route('all_employee_sitename') }}"><i class="la la-child"></i>&nbsp;
-                                    <span> Site Name & salary </span></a>
-                            </li>
-
-                        </ul>
-                    </li>
-
+                            </ul>
+                        </li>
+                    @endif
                     <li class="submenu">
                         <a href="#"><i class="la la-money"></i> <span> My Informations </span> <span
                                 class="menu-arrow"></span></a>
@@ -336,47 +339,77 @@
                             </li>
                         </ul>
                     </li>
-
+                    @if(Auth::user()?->department == 1 || Auth::user()?->department == 2 || Auth::user()?->department == 3 || Auth::user()?->department == 4)
+                        <li class="submenu">
                     <li class="submenu">
                         <a href="#" class="noti-dot"><i class="la la-users"></i> <span> Attendance</span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
                             <li>
-                                <a href="{{ route('attendance_list',['id'=>0]) }}"><i class="la  la-calendar"></i> &nbsp; <span>
+                                <a href="{{ route('attendance_list', ['id' => 0]) }}"><i class="la  la-calendar"></i>
+                                    &nbsp; <span>
                                         All Employees </span></a>
                             </li>
                             @foreach ($department as $d)
                                 @if ($d->department != 'Admin')
-                                    <li>
-                                        <a href="{{ route('attendance_list',['id'=>$d->id]) }}"><i class="la la-calendar"></i> &nbsp; <span> {{ Str::ucfirst($d->department) }}
-                                            </span></a>
-                                    </li>
+                                    {{-- Check if current user's department has access to this department --}}
+                                    @php
+                                        $showDepartment = false;
+
+                                        // Admin can see all departments except themselves
+                                        if (Auth::user()->department == 1 && $d->id != 1) {
+                                            $showDepartment = true;
+                                        }
+                                        // Manager can see everything below (Officer, Supervisor, Guard, Servicemans)
+                                        elseif (Auth::user()->department == 2 && $d->report_id >= 2 && $d->id != 2) {
+                                            $showDepartment = true;
+                                        }
+                                        // Officer can see Supervisor and below
+                                        elseif (Auth::user()->department == 3 && $d->report_id >= 3 && $d->id != 3) {
+                                            $showDepartment = true;
+                                        }
+                                        // Supervisor can see Guard and Servicemans
+                                        elseif (Auth::user()->department == 4 && $d->report_id >= 4 && $d->id != 4) {
+                                            $showDepartment = true;
+                                        }
+                                        // Guard/Servicemans won't see anything (can't see themselves or below)
+                                    @endphp
+
+                                    @if ($showDepartment)
+                                        <li>
+                                            <a href="{{ route('attendance_list', ['id' => $d->id]) }}">
+                                                <i class="la la-calendar"></i>
+                                                &nbsp; <span>{{ Str::ucfirst($d->department) }}</span>
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endif
                             @endforeach
-                           {{--   <li>
+                            {{-- <li>
                                 <a href="{{ route('gaurd_attendance') }}"><i class="la la-calendar"></i> &nbsp; <span>
-                                        Guard </span></a>
-                            </li>
-                            <li>
-                                <a href="{{ route('qrt_attendance') }}"><i class="la la-calendar"></i> &nbsp; <span>
-                                        QRT </span></a>
-                            </li>
-                            <li>
-                                <a href="{{ route('officer_attendance') }}"><i class="la la-calendar"></i> &nbsp;
-                                    <span> Officer </span></a>
-                            </li>
-                            <li>
-                                <a href="{{ route('management_attendance') }}"><i class="la la-calendar"></i> &nbsp;
-                                    <span> Management </span></a>
-                            </li> --}}
-
-                            <li><a href="{{ route('transfer') }}"><i class="la la-calendar"></i> &nbsp; <span>
-                                        Transfer </span> </a></li>
-
-                        </ul>
+                                Guard </span></a>
                     </li>
+                    <li>
+                        <a href="{{ route('qrt_attendance') }}"><i class="la la-calendar"></i> &nbsp; <span>
+                                QRT </span></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('officer_attendance') }}"><i class="la la-calendar"></i> &nbsp;
+                            <span> Officer </span></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('management_attendance') }}"><i class="la la-calendar"></i> &nbsp;
+                            <span> Management </span></a>
+                    </li> --}}
 
-                    <!--<li class="submenu">
+                    <li><a href="{{ route('transfer') }}"><i class="la la-calendar"></i> &nbsp; <span>
+                                Transfer </span> </a></li>
+
+                </ul>
+                    </li>
+                    @endif
+
+                <!--<li class="submenu">
                             <a href="#" class="noti-dot"><i class="la la-users"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
                             <ul style="display: none;">
                                 <li><a href="add-employ.php"> Add Employees</a></li>
@@ -384,24 +417,38 @@
 
                             </ul>
                         </li>-->
-
+                @if(Auth::user()?->department == 1 || Auth::user()?->department == 2)
                     <li class="submenu">
-                        <a href="#"><i class="la la-money"></i> <span> Payroll </span> <span
-                                class="menu-arrow"></span></a>
+                        <a href="#"><i class="la la-money"></i> <span> Payroll </span> <span class="menu-arrow"></span></a>
                         <ul style="display: none;">
                             <li><a href="{{ route('generate_salary') }}"> Genrate Salary </a></li>
-                            <li><a href="{{ route('emp_salary_report') }}" class=""> Employee Salary Report
+                            <li><a href="{{ route('salary_get_month_wise') }}" class=""> Employee Salary Report
                                 </a></li>
                             <li><a href="{{ route('emp_pf_detail') }}"> Employee PF Details </a></li>
 
                         </ul>
                     </li>
+                @endif
 
+                <li class="submenu">
+                    <a href="#"><i class="la la-money"></i> <span> Leave </span> <span class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        @if(Auth::user()?->department == 1 || Auth::user()?->department == 2 || Auth::user()?->department == 3 || Auth::user()?->department == 4)
+                            <li><a href="{{ route('all_leave') }}"> All Leave </a></li>
+                        @endif
+                        @if(Auth::user()?->department == 1 || Auth::user()?->department == 2 || Auth::user()?->department == 3 || Auth::user()?->department == 4)
+                        <li><a href="{{ route('todat_leave') }}"> ToDay Leave </a></li>
+                        @endif
+                        <li><a href="{{ route('emp_leave') }}" class=""> My Leave
+                            </a></li>
+
+                    </ul>
+                </li>
+                @if(Auth::user()?->department == 1 || Auth::user()?->department == 2 || Auth::user()?->department == 3)
                     <li class="submenu">
-                        <a href="#"><i class="la la-gears"></i> <span> Settings </span> <span
-                                class="menu-arrow"></span></a>
+                        <a href="#"><i class="la la-gears"></i> <span> Settings </span> <span class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="{{ route('add_location') }}"><i class="la la-map-marker"></i> &nbsp; <span>
+                            <li><a href="{{ route('list_location') }}"><i class="la la-map-marker"></i> &nbsp; <span>
                                         Add location (Site)</span></a></li>
                             <li><a href="{{ route('roles_group') }}"> <i class="la la-group"></i> &nbsp; <span> Roles
                                         & Group </span></a></li>
@@ -412,9 +459,9 @@
 
                         </ul>
                     </li>
+                @endif
 
-
-                    <!-- <li>
+                <!-- <li>
                             <a href="projects.html"><i class="la la-rocket"></i> <span>Projects</span></a>
                         </li>
                         <li>
@@ -430,10 +477,10 @@
                             </ul>
                         </li>-->
 
-                    <!--<li>
+                <!--<li>
                             <a href="leads.html"><i class="la la-user-secret"></i> <span>Leads</span></a>
                         </li>-->
-                    <!--<li class="submenu">
+                <!--<li class="submenu">
                             <a href="#"><i class="la la-files-o"></i> <span> Accounts </span> <span class="menu-arrow"></span></a>
                             <ul style="display: none;">
                                 <li><a href="#">Estimates</a></li>
@@ -446,21 +493,20 @@
                         </li>-->
 
 
-                    <!--<li>
+                <!--<li>
                             <a href="#"><i class="la la-users"></i> <span>Clients</span></a>
                         </li>-->
-
+                @if(Auth::user()?->department == 1 || Auth::user()?->department == 2)
                     <li>
                         <a href="{{ route('all_client') }}"><i class="la la-user"></i> <span> All Client (Site)
                             </span></a>
                     </li>
-
-                    <li>
-                        <a href="{{ route('contact') }}"><i class="la la-book"></i> <span>Contacts</span></a>
-                    </li>
+                @endif
 
 
-                    <!-- <li class="submenu">
+
+
+                <!-- <li class="submenu">
                             <a href="#"><i class="la la-building"></i> <span> Jobs </span> <span class="menu-arrow"></span></a>
                             <ul style="display: none;">
                                 <li><a href="jobs.html"> Manage Jobs </a></li>

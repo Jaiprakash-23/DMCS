@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <!-- <script>
+            
+            function parseTimeToDate(timeStr) {
+                const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+                const now = new Date();
+                return new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate(),
+                    hours,
+                    minutes,
+                    seconds
+                );
+            }
+
+            const punchInTime = parseTimeToDate('11:49:31');
+            const currentTime = new Date();
+
+            function getTimeDifference(punchInTime, currentTime) {
+                const diffMs = currentTime - punchInTime;
+                const diffSec = Math.floor(diffMs / 1000);
+                const hours = Math.floor(diffSec / 3600);
+                const minutes = Math.floor((diffSec % 3600) / 60);
+                const seconds = diffSec % 60;
+
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            const timeWorked = getTimeDifference(punchInTime, currentTime);
+            function updateClock() {
+                const punchInTime = parseTimeToDate('11:49:31');
+                const currentTime = new Date();
+                const timeWorked = getTimeDifference(punchInTime, currentTime);
+            } 
+            setInterval(updateClock, 1000);
+            updateClock();
+            console.log(timeWorked);
+        </script> -->
+    </body>
+    <!-- <script>
+        // 1. Parse time string (HH:mm:ss) into a Date object
+        function parseTimeToDate(timeStr) {
+            const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+            const now = new Date();
+            return new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                hours,
+                minutes,
+                seconds
+            );
+        }
+
+        // 2. Calculate time difference between punchIn and current time
+        function getTimeDifference(punchInTime, currentTime) {
+            const diffMs = currentTime - punchInTime;
+            const diffSec = Math.floor(diffMs / 1000);
+            const hours = Math.floor(diffSec / 3600);
+            const minutes = Math.floor((diffSec % 3600) / 60);
+            const seconds = diffSec % 60;
+
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // 3. Update the time difference every second
+        let punchIn = "11:49:31"; // Your punch-in time
+        let timeWorked;
+
+        function updateClock() {
+            const punchInTime = parseTimeToDate(punchIn);
+            const currentTime = new Date();
+            timeWorked = getTimeDifference(punchInTime, currentTime);
+
+            console.log(timeWorked); // Display in console (or update HTML)
+        }
+
+        // Start the counter (updates every second)
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call
+    </script> -->
+
+
+    <!-- <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get punch-in time and status from the page
+            var punchIn_at = document.querySelector('#punch_in')?.innerText || "13:30:00";
+            var status = document.querySelector('#status')?.innerText || "1";
+        
+            // Configuration
+            const STANDARD_DUTY_HOURS = 1; // 8 hours standard work day
+            
+            // Debugging: Check if elements exist
+            console.log("Punch In Element:", document.querySelector('#punch_in'));
+            console.log("Status Element:", document.querySelector('#status'));
+            console.log("Punch In Time:", punchIn_at);
+            console.log("Status:", status);
+        
+            function parseTimeToDate(timeStr) {
+                try {
+                    const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+                    const now = new Date();
+                    return new Date(
+                        now.getFullYear(),
+                        now.getMonth(),
+                        now.getDate(),
+                        hours,
+                        minutes,
+                        seconds
+                    );
+                } catch (e) {
+                    console.error("Error parsing time:", e);
+                    return new Date(); // Return current time as fallback
+                }
+            }
+        
+            function getTimeDifference(punchInTime, currentTime) {
+                const diffMs = currentTime - punchInTime;
+                const diffSec = Math.floor(diffMs / 1000);
+                const totalHours = diffSec / 3600;
+                const hours = Math.floor(diffSec / 3600);
+                const minutes = Math.floor((diffSec % 3600) / 60);
+                const seconds = diffSec % 60;
+        
+                return {
+                    formatted: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`,
+                    totalHours: totalHours,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                };
+            }
+        
+            function formatHours(hours) {
+                const h = Math.floor(hours);
+                const m = Math.floor((hours - h) * 60);
+                const s = Math.floor(((hours - h) * 60 - m) * 60);
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }
+        
+            function updateClock() {
+                const punchInTime = parseTimeToDate(punchIn_at);
+                const currentTime = new Date();
+                const timeData = getTimeDifference(punchInTime, currentTime);
+        
+                // Calculate duty and overtime
+                let dutyHours = Math.min(timeData.totalHours, STANDARD_DUTY_HOURS);
+                let overtimeHours = Math.max(0, timeData.totalHours - STANDARD_DUTY_HOURS);
+        
+                // Update the display
+                document.getElementById('total-time-display').textContent = timeData.formatted;
+                document.getElementById('duty-hours-display').textContent = formatHours(dutyHours);
+                document.getElementById('overtime-display').textContent = formatHours(overtimeHours);
+            }
+        
+            // Only start the timer if status is "1" (active)
+            if(status == "1") {
+                // Create display elements if they don't exist
+                if (!document.getElementById('attendance-display')) {
+                    const displayDiv = document.createElement('div');
+                    displayDiv.id = 'attendance-display';
+                    displayDiv.innerHTML = `
+                        <div>Total Time Worked: <span id="total-time-display">00:00:00</span></div>
+                        <div>Duty Hours: <span id="duty-hours-display">00:00:00</span></div>
+                        <div>Overtime: <span id="overtime-display">00:00:00</span></div>
+                    `;
+                    document.body.appendChild(displayDiv);
+                }
+        
+                // Run immediately first
+                updateClock();
+                // Then update every second
+                setInterval(updateClock, 1000);
+            } else {
+                console.log("Attendance not active (status is not 1)");
+            }
+        });
+        </script> -->
+     
+        <!-- <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var punchIn_at = document.querySelector('#punch_in')?.innerText || "8:0:00";
+                var status = document.querySelector('#status')?.innerText || "1";
+                const STANDARD_DUTY_HOURS = 1; 
+                
+                console.log("Punch In Element:", document.querySelector('#punch_in'));
+                console.log("Status Element:", document.querySelector('#status'));
+                console.log("Punch In Time:", punchIn_at);
+                console.log("Status:", status);
+            
+                function parseTimeToDate(timeStr) {
+                    try {
+                        const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+                        const now = new Date();
+                        return new Date(
+                            now.getFullYear(),
+                            now.getMonth(),
+                            now.getDate(),
+                            hours,
+                            minutes,
+                            seconds
+                        );
+                    } catch (e) {
+                        console.error("Error parsing time:", e);
+                        return new Date();
+                    }
+                }
+            
+                function getTimeDifference(punchInTime, currentTime) {
+                    const diffMs = currentTime - punchInTime;
+                    const diffSec = Math.floor(diffMs / 1000);
+                    const totalHours = diffSec / 3600;
+                    const hours = Math.floor(diffSec / 3600);
+                    const minutes = Math.floor((diffSec % 3600) / 60);
+                    const seconds = diffSec % 60;
+            
+                    return {
+                        formatted: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`,
+                        totalHours: totalHours,
+                        hours: hours,
+                        minutes: minutes,
+                        seconds: seconds
+                    };
+                }
+            
+                function formatHours(hours) {
+                    const h = Math.floor(hours);
+                    const m = Math.floor((hours - h) * 60);
+                    const s = Math.floor(((hours - h) * 60 - m) * 60);
+                    return convertTo12Hour(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`);
+                }
+            
+                function convertTo12Hour(time24) {
+                    const [hours, minutes, seconds] = time24.split(':');
+                    const period = hours >= 12 ? 'PM' : 'AM';
+                    const hours12 = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+                    return `${hours12}:${minutes}:${seconds} ${period}`;
+                }
+            
+                function updateClock() {
+                    const punchInTime = parseTimeToDate(punchIn_at);
+                    const currentTime = new Date();
+                    const timeData = getTimeDifference(punchInTime, currentTime);
+            
+                    let dutyHours = Math.min(timeData.totalHours, STANDARD_DUTY_HOURS);
+                    let overtimeHours = Math.max(0, timeData.totalHours - STANDARD_DUTY_HOURS);
+            
+                    document.getElementById('total-time-display').textContent = convertTo12Hour(timeData.formatted);
+                    document.getElementById('duty-hours-display').textContent = formatHours(dutyHours);
+                    document.getElementById('overtime-display').textContent = formatHours(overtimeHours);
+                }
+            
+                if(status == "1") {
+                    if (!document.getElementById('attendance-display')) {
+                        const displayDiv = document.createElement('div');
+                        displayDiv.id = 'attendance-display';
+                        displayDiv.innerHTML = `
+                            <div>Total Time Worked: <span id="total-time-display">00:00:00 AM</span></div>
+                            <div>Duty Hours: <span id="duty-hours-display">00:00:00 AM</span></div>
+                            <div>Overtime: <span id="overtime-display">00:00:00 AM</span></div>
+                        `;
+                        document.body.appendChild(displayDiv);
+                    }
+            
+                    updateClock();
+                    setInterval(updateClock, 1000);
+                } else {
+                    console.log("Attendance not active (status is not 1)");
+                }
+            });
+            </script> -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Configuration
+                    const STANDARD_DUTY_HOURS = 12; // Standard 8-hour work day
+                    
+                    // Get punch-in time (must be in HH:MM:SS 24-hour format)
+                    var punchIn_at = "10:00:48"; // Example: 11:00:48 AM
+                    var status = "1"; // Active status
+                    
+                    // Debugging
+                    console.log("Initial Punch In Time:", punchIn_at);
+                    console.log("Status:", status);
+                
+                    // Improved time parsing function
+                    function parseTimeToDate(timeStr) {
+                        // Ensure time has all components (HH:MM:SS)
+                        if (!timeStr.includes(':')) timeStr += ":00:00";
+                        const parts = timeStr.split(':');
+                        if (parts.length === 1) parts.push('00', '00');
+                        if (parts.length === 2) parts.push('00');
+                        
+                        const [hours, minutes, seconds] = parts.map(Number);
+                        const now = new Date();
+                        return new Date(
+                            now.getFullYear(),
+                            now.getMonth(),
+                            now.getDate(),
+                            hours,
+                            minutes,
+                            seconds
+                        );
+                    }
+                
+                    // More accurate time difference calculation
+                    function getTimeDifference(punchInTime, currentTime) {
+                        const diffMs = currentTime - punchInTime;
+                        
+                        // Handle negative difference (edge case)
+                        if (diffMs < 0) {
+                            console.warn("Negative time difference detected - check punch in time");
+                            return {
+                                formatted24: "00:00:00",
+                                totalHours: 0,
+                                hours: 0,
+                                minutes: 0,
+                                seconds: 0
+                            };
+                        }
+                        
+                        const diffSec = Math.floor(diffMs / 1000);
+                        const totalHours = diffSec / 3600;
+                        const hours = Math.floor(diffSec / 3600);
+                        const minutes = Math.floor((diffSec % 3600) / 60);
+                        const seconds = diffSec % 60;
+                
+                        return {
+                            formatted24: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`,
+                            totalHours: totalHours,
+                            hours: hours,
+                            minutes: minutes,
+                            seconds: seconds
+                        };
+                    }
+                
+                    // Robust 12-hour format conversion
+                    function convertTo12Hour(time24) {
+                        // Handle incomplete time strings
+                        if (!time24) return "00:00:00 AM";
+                        
+                        const parts = time24.split(':');
+                        const hours = parseInt(parts[0]) || 0;
+                        const minutes = parts[1] ? String(parts[1]).padStart(2, '0') : "00";
+                        const seconds = parts[2] ? String(parts[2]).padStart(2, '0') : "00";
+                        
+                        const period = hours >= 12 ? 'PM' : 'AM';
+                        const hours12 = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+                        
+                        return `${hours12}:${minutes}:${seconds} ${period}`;
+                    }
+                
+                    // Accurate hours to time string conversion
+                    function formatHoursTo12(hoursDecimal) {
+                        // Ensure we have a valid number
+                        hoursDecimal = parseFloat(hoursDecimal) || 0;
+                        
+                        const totalSeconds = Math.round(hoursDecimal * 3600);
+                        const hours = Math.floor(totalSeconds / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        const seconds = totalSeconds % 60;
+                        
+                        // Create 24-hour format first
+                        const time24 = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                        return convertTo12Hour(time24);
+                    }
+                
+                    // Main update function
+                    function updateClock() {
+                        const punchInTime = parseTimeToDate(punchIn_at);
+                        const currentTime = new Date();
+                        const timeData = getTimeDifference(punchInTime, currentTime);
+                
+                        // Calculate duty and overtime (with proper rounding)
+                        let dutyHours = Math.min(timeData.totalHours, STANDARD_DUTY_HOURS);
+                        let overtimeHours = Math.max(0, timeData.totalHours - STANDARD_DUTY_HOURS);
+                        
+                        // Round to 4 decimal places to avoid floating point issues
+                        dutyHours = parseFloat(dutyHours.toFixed(4));
+                        overtimeHours = parseFloat(overtimeHours.toFixed(4));
+                
+                        // Update the display
+                        document.getElementById('punch-in-time').textContent = convertTo12Hour(punchIn_at);
+                        document.getElementById('current-time').textContent = convertTo12Hour(currentTime.toTimeString().substring(0, 8));
+                        document.getElementById('total-time-display').textContent = convertTo12Hour(timeData.formatted24);
+                        document.getElementById('duty-hours-display').textContent = formatHoursTo12(dutyHours);
+                        document.getElementById('overtime-display').textContent = formatHoursTo12(overtimeHours);
+                        
+                        // Update status message
+                        if (timeData.totalHours < STANDARD_DUTY_HOURS) {
+                            const remaining = (STANDARD_DUTY_HOURS - timeData.totalHours).toFixed(4);
+                            document.getElementById('status-message').textContent = 
+                                `Remaining duty time: ${formatHoursTo12(remaining)}`;
+                        } else {
+                            document.getElementById('status-message').textContent = 
+                                `Completed standard duty hours. Overtime: ${formatHoursTo12(overtimeHours)}`;
+                        }
+                        
+                        // Debug output
+                        // console.log("Punch In:", punchInTime);
+                        // console.log("Current:", currentTime);
+                        // console.log("Total Hours:", timeData.totalHours);
+                        // console.log("Duty Hours:", dutyHours);
+                        // console.log("Overtime:", overtimeHours);
+                    }
+                
+                    // Create display elements if they don't exist
+                    if (!document.getElementById('attendance-display')) {
+                        const displayDiv = document.createElement('div');
+                        displayDiv.id = 'attendance-display';
+                        displayDiv.style.fontFamily = 'Arial, sans-serif';
+                        displayDiv.style.padding = '20px';
+                        displayDiv.style.backgroundColor = '#f5f5f5';
+                        displayDiv.style.borderRadius = '5px';
+                        displayDiv.style.margin = '10px';
+                        displayDiv.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+                        
+                        displayDiv.innerHTML = `
+                            <h3 style="color: #333; margin-top: 0;">Attendance Tracker</h3>
+                            <div style="margin-bottom: 5px;"><strong>Punch In Time:</strong> <span id="punch-in-time">${convertTo12Hour(punchIn_at)}</span></div>
+                            <div style="margin-bottom: 5px;"><strong>Current Time:</strong> <span id="current-time">00:00:00 AM</span></div>
+                            <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
+                            <div style="margin-bottom: 5px;"><strong>Total Time Worked:</strong> <span id="total-time-display">00:00:00 AM</span></div>
+                            <div style="margin-bottom: 5px;"><strong>Duty Hours Completed:</strong> <span id="duty-hours-display">00:00:00 AM</span></div>
+                            <div style="margin-bottom: 5px;"><strong>Overtime:</strong> <span id="overtime-display">00:00:00 AM</span></div>
+                            <div id="status-message" style="margin-top: 15px; padding: 8px; background: #e9f7ef; border-radius: 4px;"></div>
+                        `;
+                        document.body.appendChild(displayDiv);
+                    }
+                
+                    // Start the clock if status is active
+                    if (status == "1") {
+                        updateClock();
+                        setInterval(updateClock, 1000);
+                    } else {
+                        document.getElementById('status-message').textContent = "Attendance not active";
+                    }
+                });
+                </script>
+
+            </html>

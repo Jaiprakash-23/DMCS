@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Category;
-use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Models\AllEmployeeEmp;
+use App\Models\location_site;
+
 
 class WelcomeController extends Controller
-{
+{  
     public function index(){
-
-        return view('index');
+       $user = AllEmployeeEmp::all()->count();
+       
+       $site = location_site::all()->count();
+        return view('index',compact('user','site'));
     }
 }
