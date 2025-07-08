@@ -47,7 +47,7 @@ class LoginController extends Controller
 }
 
   public function logout()
-  { 
+  {
     // dd('hello');
     if (Auth::check()) {
       Auth::logout();
