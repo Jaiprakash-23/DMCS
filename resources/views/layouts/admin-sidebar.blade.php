@@ -22,7 +22,7 @@
         <!-- Logo -->
         <div class="header-left">
             <a href="index.php" class="logo">
-                <img src="assets/img/logo.png" width="40" height="40" alt="">
+                <img src="{{asset('dashboard/img/logo.png')}}" width="40" height="40" alt="" class="mt-2">
             </a>
         </div>
         <!-- /Logo -->

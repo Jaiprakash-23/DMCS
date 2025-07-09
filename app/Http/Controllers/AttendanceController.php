@@ -13,6 +13,8 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB as FacadesDB;
+
 class AttendanceController extends Controller
 {
 
@@ -32,14 +34,16 @@ class AttendanceController extends Controller
             'emp_name' => 'required',
             'site_from' => 'required',
             'site_to' => 'required',
-            'report_to' => 'required'
+            'report_to' => 'required',
+            'shift' =>'required'
         ]);
         EmpTransfer::create([
             'emp_id' => $request->emp_id,
             'emp_name' => $request->emp_name,
             'site_from' => $request->site_from,
             'site_to' => $request->site_to,
-            'report_to' => $request->report_to
+            'report_to' => $request->report_to,
+            'shift'=>$request->shift
         ]);
         $auth = Auth::user();
         // dd($request->report_to);
@@ -83,7 +87,7 @@ class AttendanceController extends Controller
     }
 
 
-    public function AttendanceList(Request $request, $id=null)
+    public function AttendanceList(Request $request, $id)
     {
         
         $site_name = DB::table('location_site')->get();
@@ -147,7 +151,7 @@ class AttendanceController extends Controller
                     ]
                 );
             }
-            return view('attendance_list', compact('department_name', 'site_name', 'designation', 'employee'));
+            return view('attendance_list', compact('department_name', 'site_name', 'designation', 'employee',));
         }
         return view('attendance_list', compact('department_name', 'site_name', 'designation', 'employee'));
 

@@ -149,6 +149,15 @@ document.getElementById('profileUpload').addEventListener('change', function(e) 
                                 <option value="{{ $employee?->reports_to }}">Report to</option>
                             </select>
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">shift <span class="text-red-500">*</span></label>
+                            <select name="shift" id="shift_id" class="w-full form-input rounded-md border-gray-300 border py-1 px-1">
+                                <option value="day">day</option>
+                                <option value="night">night</option>
+                            </select>
+                        </div>
+
                     </div>
                 </div>
             </div>

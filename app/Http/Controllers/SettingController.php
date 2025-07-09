@@ -277,9 +277,10 @@ class SettingController extends Controller
             $emp->phone = $request->contact;
             $emp->date_of_joining = $request->joining_date;
             $emp->reports_to = $request->report_id;
+            $emp->shift=$request->shift;
             $emp->date_of_birth = $request->dob;
             $emp->gender = $request->gender;
-            $emp->shift = null;
+            // $emp->shift = null;
             $emp->address = $request->address;
             $emp->aadhaar_no = $request->aadhar_no;
             $emp->voter_id = $request->voter_id_no;
@@ -351,9 +352,10 @@ class SettingController extends Controller
             "profile_image" => $path,
             "date_of_joining" => $request->joining_date,
             "reports_to" => $request->report_id,
+            "shift"=> $request->shift,
             "date_of_birth" => $request->dob,
             "gender" => $request->gender,
-            "shift" => null,
+            // "shift" => null,
             "address" => $request->address,
             "aadhaar_no" => $request->aadhar_no,
             "voter_id" => $request->voter_id_no,

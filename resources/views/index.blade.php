@@ -9,17 +9,17 @@
         <!-- Page Content -->
         <div class="content container-fluid">
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
                     <div class="dash-widget clearfix card-box">
                         <span class="dash-widget-icon"><i class="fa fa-users"></i></span>
                         <div class="dash-widget-info">
-                            <h3> {{ $user }} </h3>
+                            <h3> {{ $total_emp }} </h3>
                             <span> Total Employees </span>
                         </div>
                     </div>
 
                 </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
                     <div class="dash-widget clearfix card-box">
                         <span class="dash-widget-icon"><i class="fa fa-building-o"></i></span>
                         <div class="dash-widget-info">
@@ -28,21 +28,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <div class="dash-widget clearfix card-box">
-                        <span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
-                        <div class="dash-widget-info">
-                            <h3>37</h3>
-                            <span>Tasks</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+               
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
                     <div class="dash-widget clearfix card-box">
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
-                            <h3>{{ $user }}</h3>
-                            <span> Employees</span>
+                            <h3>{{ $departmentss }}</h3>
+                            <span>Total Departments</span>
                         </div>
                     </div>
                 </div>
@@ -61,11 +53,11 @@
                                         <div class="card-body">
                                             <div class="time-list">
                                                 <div class="dash-stats-list">
-                                                    <h4>12</h4>
+                                                    <h4>{{$presentToday}}</h4>
                                                     <p>Present</p>
                                                 </div>
                                                 <div class="dash-stats-list">
-                                                    <h4>2</h4>
+                                                    <h4>{{$absentToday}}</h4>
                                                     <p>Absent</p>
                                                 </div>
                                             </div>
@@ -93,11 +85,11 @@
                                         <div class="card-body">
                                             <div class="time-list">
                                                 <div class="dash-stats-list">
-                                                    <h4>3</h4>
+                                                    <h4>{{$presentnight}}</h4>
                                                     <p>Present</p>
                                                 </div>
                                                 <div class="dash-stats-list">
-                                                    <h4>4</h4>
+                                                    <h4>{{$absentnight}}</h4>
                                                     <p>Absent</p>
                                                 </div>
                                             </div>
